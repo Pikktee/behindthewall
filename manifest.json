@@ -39,7 +39,7 @@
         "default": "Alt+Shift+A",
         "mac": "Alt+Shift+A"
       },
-      "description": "Aktuelle Seite bei Archive.is oeffnen"
+      "description": "Aktuelle Seite bei Archive.is öffnen"
     }
   },
   "permissions": [

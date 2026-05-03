@@ -31,7 +31,7 @@ resultsEl.addEventListener("click", async (event) => {
 
   try {
     await deleteBookmark(deleteButton.dataset.deleteId);
-    setStatus("Eintrag geloescht.");
+    setStatus("Eintrag gelöscht.");
     await loadResults(searchInput.value);
   } catch (error) {
     setStatus(error.message, true);
@@ -47,8 +47,8 @@ async function loadResults(query) {
     renderResults(response.items || []);
     setStatus(
       query.trim()
-        ? `${response.items.length} Treffer fuer "${query.trim()}".`
-        : `${response.items.length} Eintraege geladen.`
+        ? `${response.items.length} Treffer für "${query.trim()}".`
+        : `${response.items.length} Einträge geladen.`
     );
   } catch (error) {
     renderResults([]);
@@ -60,8 +60,8 @@ function renderResults(items) {
   if (!items.length) {
     resultsEl.innerHTML = `
       <article class="empty-state">
-        <h2>Keine Eintraege</h2>
-        <p>Speichere zuerst eine Seite oder pruefe die Backend-Konfiguration.</p>
+        <h2>Keine Einträge</h2>
+        <p>Speichere zuerst eine Seite oder prüfe die Backend-Konfiguration.</p>
       </article>
     `;
     return;
@@ -82,11 +82,11 @@ function renderCard(item) {
     <article class="result-card">
       <div class="result-topline">
         <a class="result-title" href="${escapeAttribute(item.url)}" target="_blank" rel="noreferrer">${title}</a>
-        <button type="button" class="ghost-button" data-delete-id="${escapeAttribute(item.id)}">Loeschen</button>
+        <button type="button" class="ghost-button" data-delete-id="${escapeAttribute(item.id)}">Löschen</button>
       </div>
       <p class="result-url">${url}</p>
       ${tags}
-      <p class="result-excerpt">${excerpt || "Kein Auszug verfuegbar."}</p>
+      <p class="result-excerpt">${excerpt || "Kein Auszug verfügbar."}</p>
       <p class="result-meta">Zuletzt aktualisiert: ${formatDate(item.updatedAt)}</p>
     </article>
   `;

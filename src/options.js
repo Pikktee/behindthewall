@@ -24,7 +24,7 @@ testConnectionButton.addEventListener("click", async () => {
   try {
     await saveSettings(false);
     const health = await checkBackend();
-    setStatus(`Backend erreichbar, ${health.count} gespeicherte Eintraege.`);
+    setStatus(`Backend erreichbar, ${health.count} gespeicherte Einträge.`);
   } catch (error) {
     setStatus(error.message, true);
   }

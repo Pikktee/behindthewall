@@ -37,7 +37,7 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   void (async () => {
     try {
       if (!chrome.scripting?.executeScript) {
-        throw new Error("Scripting API ist nicht verfuegbar. Bitte Erweiterung neu laden.");
+        throw new Error("Die Scripting-API ist nicht verfügbar. Bitte Erweiterung neu laden.");
       }
 
       await chrome.scripting.executeScript({

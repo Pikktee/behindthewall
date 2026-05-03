@@ -31,7 +31,7 @@ export function normalizeSourceUrl(value) {
 function getStorageArea() {
   const storage = globalThis.chrome?.storage?.sync || globalThis.chrome?.storage?.local;
   if (!storage) {
-    throw new Error("Die Storage-API der Erweiterung ist nicht verfuegbar. Bitte Erweiterung neu laden.");
+    throw new Error("Die Storage-API der Erweiterung ist nicht verfügbar. Bitte Erweiterung neu laden.");
   }
   return storage;
 }

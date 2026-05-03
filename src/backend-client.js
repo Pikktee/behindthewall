@@ -51,7 +51,7 @@ async function request(path, init = {}) {
 
   const json = await response.json().catch(() => ({}));
   if (!response.ok) {
-    throw new Error(json.error || `Request fehlgeschlagen: ${response.status}`);
+    throw new Error(json.error || `Anfrage fehlgeschlagen: ${response.status}`);
   }
 
   return json;
