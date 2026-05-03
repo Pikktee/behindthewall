@@ -4,132 +4,158 @@ function renderLibraryPage() {
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Behind The Wall Bibliothek</title>
+    <title>Behind The Wall — Bibliothek</title>
     <style>
       :root {
         color-scheme: light;
-        --bg: #f7f5ef;
+        --bg: #faf8f3;
         --surface: #ffffff;
         --surface-subtle: #fcfbf8;
         --surface-muted: #f2efe8;
-        --line: #dfdbd1;
+        --line: #e5e0d4;
         --line-strong: #c9c3b8;
         --text: #17211f;
-        --muted: #687670;
+        --muted: #6b7872;
         --muted-strong: #4e5d57;
         --accent: #1f7a72;
         --accent-strong: #175d57;
         --accent-soft: #e2f0ed;
+        --accent-ring: rgba(31, 122, 114, 0.18);
         --danger: #b24f44;
         --danger-soft: #f8e6e3;
-        --shadow: 0 18px 40px rgba(22, 33, 31, 0.06);
+        --warn-soft: #fbf1d9;
+        --shadow-xs: 0 1px 2px rgba(22, 33, 31, 0.04);
+        --shadow-sm: 0 4px 14px rgba(22, 33, 31, 0.05);
+        --shadow: 0 8px 24px rgba(22, 33, 31, 0.06);
+        --radius-sm: 8px;
+        --radius: 10px;
+        --radius-lg: 14px;
+        --transition: 160ms cubic-bezier(0.4, 0, 0.2, 1);
         font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        font-feature-settings: "cv11", "ss01";
       }
 
-      * {
+      *,
+      *::before,
+      *::after {
         box-sizing: border-box;
       }
 
+      html,
       body {
         margin: 0;
-        min-height: 100vh;
-        background:
-          radial-gradient(circle at top left, rgba(255, 255, 255, 0.92), transparent 28%),
-          linear-gradient(180deg, #faf8f3 0%, #f5f2eb 100%);
+        background: var(--bg);
         color: var(--text);
       }
 
-      body::before {
-        content: "";
-        position: fixed;
-        inset: 0 0 auto;
-        height: 220px;
-        pointer-events: none;
-        background: linear-gradient(180deg, rgba(31, 122, 114, 0.08) 0%, rgba(31, 122, 114, 0) 100%);
+      body {
+        min-height: 100vh;
+        background:
+          radial-gradient(circle at top left, rgba(255, 255, 255, 0.9), transparent 32%),
+          linear-gradient(180deg, #faf8f3 0%, #f5f2ea 100%);
       }
 
       button,
       input,
-      select {
+      select,
+      textarea {
         font: inherit;
+        color: inherit;
+      }
+
+      a {
+        color: inherit;
       }
 
       .shell {
         width: min(1440px, calc(100vw - 40px));
         margin: 0 auto;
-        padding: 24px 0 36px;
+        padding: 28px 0 36px;
       }
 
+      /* ---------- Header ---------- */
       .masthead {
-        display: grid;
-        gap: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 24px;
+        padding: 0 4px;
         margin-bottom: 18px;
       }
 
-      .topline {
+      .brand {
         display: flex;
-        align-items: flex-end;
-        justify-content: space-between;
-        gap: 24px;
+        align-items: center;
+        gap: 14px;
       }
 
-      .eyebrow {
-        margin: 0 0 10px;
-        color: var(--accent);
-        font-size: 13px;
+      .brand-mark {
+        display: grid;
+        place-items: center;
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        background: var(--accent);
+        color: #fff;
         font-weight: 800;
-        letter-spacing: 0.08em;
+        letter-spacing: 0.04em;
+        font-size: 14px;
+        box-shadow: 0 6px 16px rgba(31, 122, 114, 0.25);
+      }
+
+      .brand-text .eyebrow {
+        margin: 0;
+        color: var(--accent);
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.1em;
         text-transform: uppercase;
       }
 
-      h1 {
-        margin: 0;
-        font-size: clamp(34px, 5vw, 64px);
-        line-height: 0.92;
-        letter-spacing: 0;
+      .brand-text h1 {
+        margin: 2px 0 0;
+        font-size: 26px;
+        line-height: 1;
+        letter-spacing: -0.01em;
       }
 
-      .lede {
-        max-width: 720px;
-        margin: 12px 0 0;
-        color: var(--muted);
-        font-size: 17px;
-        line-height: 1.55;
-      }
-
-      .top-actions,
-      .settings-actions,
-      .detail-actions,
-      .secondary-actions {
+      .header-actions {
         display: flex;
-        flex-wrap: wrap;
+        align-items: center;
         gap: 8px;
       }
 
-      .top-actions {
-        flex-shrink: 0;
-      }
-
+      /* ---------- Buttons ---------- */
       button {
         display: inline-flex;
         align-items: center;
         justify-content: center;
         gap: 8px;
-        min-height: 40px;
+        min-height: 38px;
         padding: 0 14px;
         border: 1px solid var(--line);
-        border-radius: 8px;
+        border-radius: var(--radius-sm);
         background: var(--surface);
         color: var(--text);
         cursor: pointer;
-        transition: border-color 140ms ease, background 140ms ease, transform 140ms ease, box-shadow 140ms ease;
+        font-weight: 530;
+        transition: border-color var(--transition), background var(--transition),
+          box-shadow var(--transition), color var(--transition), transform var(--transition);
       }
 
-      button:hover,
-      button:focus-visible {
+      button:hover {
         border-color: var(--line-strong);
-        box-shadow: 0 4px 14px rgba(22, 33, 31, 0.07);
+        background: var(--surface-subtle);
+      }
+
+      button:focus-visible {
         outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px var(--accent-ring);
+      }
+
+      button:active {
+        transform: translateY(0.5px);
       }
 
       .primary-button {
@@ -138,8 +164,7 @@ function renderLibraryPage() {
         color: #fff;
       }
 
-      .primary-button:hover,
-      .primary-button:focus-visible {
+      .primary-button:hover {
         background: var(--accent-strong);
         border-color: var(--accent-strong);
       }
@@ -154,135 +179,390 @@ function renderLibraryPage() {
         color: var(--danger);
       }
 
-      .toolbar,
-      .panel,
-      .metric,
-      .reader-hero {
-        border: 1px solid var(--line);
-        border-radius: 8px;
-        background: var(--surface);
-        box-shadow: var(--shadow);
+      .danger-button:hover {
+        background: #f3d6d1;
+        border-color: rgba(178, 79, 68, 0.32);
       }
 
+      .icon-button {
+        width: 38px;
+        height: 38px;
+        min-height: 0;
+        padding: 0;
+      }
+
+      .icon-button svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      .auth-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        height: 38px;
+        padding: 0 12px 0 10px;
+        border-radius: 999px;
+        background: var(--surface);
+        border: 1px solid var(--line);
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      .auth-pill[data-state="ok"] {
+        background: var(--accent-soft);
+        border-color: rgba(31, 122, 114, 0.18);
+        color: var(--accent-strong);
+      }
+
+      .auth-pill[data-state="off"] {
+        background: var(--warn-soft);
+        border-color: rgba(170, 130, 40, 0.22);
+        color: #7a5c0f;
+      }
+
+      .auth-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: currentColor;
+        opacity: 0.7;
+      }
+
+      /* ---------- Tooltip ---------- */
+      [data-tooltip] {
+        position: relative;
+      }
+
+      [data-tooltip]::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: calc(100% + 8px);
+        left: 50%;
+        transform: translate(-50%, 4px);
+        padding: 6px 9px;
+        background: #17211f;
+        color: #fff;
+        font-size: 11.5px;
+        font-weight: 500;
+        letter-spacing: 0.01em;
+        white-space: nowrap;
+        border-radius: 6px;
+        opacity: 0;
+        pointer-events: none;
+        z-index: 50;
+        transition: opacity 140ms ease, transform 140ms ease;
+      }
+
+      [data-tooltip]::before {
+        content: "";
+        position: absolute;
+        bottom: calc(100% + 2px);
+        left: 50%;
+        transform: translate(-50%, 4px);
+        border: 5px solid transparent;
+        border-top-color: #17211f;
+        opacity: 0;
+        pointer-events: none;
+        z-index: 50;
+        transition: opacity 140ms ease, transform 140ms ease;
+      }
+
+      [data-tooltip]:hover::after,
+      [data-tooltip]:hover::before,
+      [data-tooltip]:focus-visible::after,
+      [data-tooltip]:focus-visible::before {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
+
+      [data-tooltip-anchor="end"]::after,
+      [data-tooltip-anchor="end"]::before {
+        left: auto;
+        right: 0;
+        transform: translate(0, 4px);
+      }
+
+      [data-tooltip-anchor="end"]:hover::after,
+      [data-tooltip-anchor="end"]:hover::before,
+      [data-tooltip-anchor="end"]:focus-visible::after,
+      [data-tooltip-anchor="end"]:focus-visible::before {
+        transform: translate(0, 0);
+      }
+
+      [data-tooltip-anchor="end"]::before {
+        right: 12px;
+      }
+
+      /* ---------- Toolbar ---------- */
       .toolbar {
         display: grid;
         gap: 14px;
-        padding: 16px;
-      }
-
-      .toolbar-top {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) auto;
-        gap: 12px;
-      }
-
-      .toolbar-bottom {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: space-between;
-        gap: 12px;
-      }
-
-      .search-input,
-      .field input,
-      .field select {
-        width: 100%;
-        min-height: 44px;
-        padding: 0 14px;
-        border: 1px solid var(--line);
-        border-radius: 8px;
+        padding: 14px;
         background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-sm);
+      }
+
+      .search-shell {
+        position: relative;
+      }
+
+      .search-shell .search-icon {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 18px;
+        height: 18px;
+        color: var(--muted);
+        pointer-events: none;
+      }
+
+      .search-shell .kbd-hint {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: var(--muted);
+        font-size: 11px;
+        pointer-events: none;
+      }
+
+      .search-shell .kbd-hint kbd {
+        font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+        font-size: 11px;
+        padding: 2px 6px;
+        border: 1px solid var(--line);
+        border-bottom-width: 2px;
+        border-radius: 5px;
+        background: var(--surface-muted);
+        color: var(--muted-strong);
+      }
+
+      .search-shell.has-value .kbd-hint {
+        display: none;
+      }
+
+      .search-shell .search-clear {
+        position: absolute;
+        right: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 30px;
+        height: 30px;
+        min-height: 0;
+        padding: 0;
+        border-radius: 8px;
+        border: 0;
+        background: transparent;
+        color: var(--muted);
+        display: none;
+      }
+
+      .search-shell.has-value .search-clear {
+        display: inline-flex;
+      }
+
+      .search-shell .search-clear:hover {
+        background: var(--surface-muted);
         color: var(--text);
       }
 
-      .search-input {
-        min-height: 48px;
-        padding: 0 16px;
+      .search-shell input {
+        width: 100%;
+        height: 50px;
+        padding: 0 56px 0 46px;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--surface-subtle);
         font-size: 15px;
+        transition: border-color var(--transition), box-shadow var(--transition),
+          background var(--transition);
       }
 
-      .search-input:focus,
-      .field input:focus,
-      .field select:focus {
-        border-color: rgba(15, 118, 110, 0.48);
+      .search-shell input::placeholder {
+        color: var(--muted);
+      }
+
+      .search-shell input:focus {
+        background: var(--surface);
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px var(--accent-ring);
         outline: none;
       }
 
-      .filter-row,
-      .toolbar-actions,
-      .segment-group,
-      .quick-stats {
+      .filter-row {
         display: flex;
         flex-wrap: wrap;
-        gap: 12px;
         align-items: center;
+        gap: 10px;
       }
 
-      .pill {
+      .filter-row .stats-strip {
+        margin-left: auto;
+      }
+
+      /* ---------- Custom select ---------- */
+      .select-shell {
+        position: relative;
+        display: inline-flex;
+      }
+
+      .select-shell select {
+        appearance: none;
+        -webkit-appearance: none;
+        height: 38px;
+        padding: 0 38px 0 14px;
+        border: 1px solid var(--line);
+        border-radius: var(--radius-sm);
+        background: var(--surface-subtle);
+        color: var(--text);
+        font-weight: 530;
+        cursor: pointer;
+        transition: border-color var(--transition), background var(--transition),
+          box-shadow var(--transition);
+      }
+
+      .select-shell select:hover {
+        border-color: var(--line-strong);
+        background: var(--surface);
+      }
+
+      .select-shell select:focus-visible {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px var(--accent-ring);
+      }
+
+      .select-shell::after {
+        content: "";
+        position: absolute;
+        right: 14px;
+        top: 50%;
+        width: 7px;
+        height: 7px;
+        margin-top: -5px;
+        border-right: 1.6px solid var(--muted-strong);
+        border-bottom: 1.6px solid var(--muted-strong);
+        transform: rotate(45deg);
+        pointer-events: none;
+      }
+
+      /* ---------- Switch ---------- */
+      .switch {
         display: inline-flex;
         align-items: center;
         gap: 10px;
-        min-height: 40px;
-        padding: 0 14px;
-        border: 1px solid var(--line);
-        border-radius: 8px;
-        background: var(--surface-subtle);
-        color: var(--text);
-      }
-
-      .pill input {
-        margin: 0;
-        accent-color: var(--accent);
-      }
-
-      .quick-stat {
-        display: inline-flex;
-        align-items: baseline;
-        gap: 8px;
-        min-height: 40px;
         padding: 0 12px;
+        height: 38px;
         border: 1px solid var(--line);
-        border-radius: 8px;
+        border-radius: var(--radius-sm);
         background: var(--surface-subtle);
+        cursor: pointer;
+        user-select: none;
+        font-weight: 530;
+        transition: border-color var(--transition), background var(--transition);
       }
 
-      .quick-stat strong {
-        font-size: 18px;
+      .switch:hover {
+        border-color: var(--line-strong);
+        background: var(--surface);
       }
 
-      .quick-stat span {
-        color: var(--muted);
-        font-size: 12px;
+      .switch input {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .switch-track {
+        position: relative;
+        width: 32px;
+        height: 18px;
+        border-radius: 999px;
+        background: #d6d2c8;
+        flex-shrink: 0;
+        transition: background var(--transition);
+      }
+
+      .switch-track::after {
+        content: "";
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: #fff;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
+        transition: transform var(--transition);
+      }
+
+      .switch input:checked ~ .switch-track {
+        background: var(--accent);
+      }
+
+      .switch input:checked ~ .switch-track::after {
+        transform: translateX(14px);
+      }
+
+      .switch:has(input:focus-visible) {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px var(--accent-ring);
+      }
+
+      /* ---------- Stats strip ---------- */
+      .stats-strip {
+        display: inline-flex;
+        align-items: center;
+        gap: 18px;
+        padding: 0 14px;
+        height: 38px;
+        border-radius: var(--radius-sm);
+        background: var(--surface-subtle);
+        border: 1px solid var(--line);
+        color: var(--muted-strong);
+        font-size: 13px;
+      }
+
+      .stats-strip .sep {
+        width: 1px;
+        height: 14px;
+        background: var(--line);
+      }
+
+      .stats-strip strong {
+        color: var(--text);
         font-weight: 700;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
+        margin-right: 4px;
       }
 
+      /* ---------- Dashboard ---------- */
       .dashboard {
         display: grid;
-        grid-template-columns: minmax(350px, 420px) minmax(0, 1fr);
+        grid-template-columns: minmax(360px, 460px) minmax(0, 1fr);
         gap: 18px;
         margin-top: 18px;
         align-items: start;
       }
 
-      .column {
-        display: grid;
-        align-content: start;
-        gap: 16px;
-      }
-
       .panel {
-        padding: 18px;
+        border: 1px solid var(--line);
+        border-radius: var(--radius-lg);
+        background: var(--surface);
+        box-shadow: var(--shadow-sm);
       }
 
       .results-panel {
-        padding: 0;
         overflow: hidden;
         display: grid;
-        grid-template-rows: auto auto minmax(0, 1fr);
-        min-height: calc(100vh - 230px);
+        grid-template-rows: auto minmax(0, 1fr);
+        min-height: calc(100vh - 240px);
         max-height: calc(100vh - 180px);
       }
 
@@ -291,93 +571,80 @@ function renderLibraryPage() {
         align-items: center;
         justify-content: space-between;
         gap: 12px;
-        padding: 16px 18px;
+        padding: 14px 18px;
         border-bottom: 1px solid var(--line);
         background: var(--surface-subtle);
       }
 
-      .results-title-wrap {
-        display: grid;
-        gap: 4px;
-      }
-
-      .panel-heading {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 12px;
-        margin-bottom: 14px;
-      }
-
-      .panel-heading h2,
-      .detail-title,
-      .auth-title,
-      .reader-title {
+      .results-header h2 {
         margin: 0;
-        font-size: 22px;
-        line-height: 1.2;
-      }
-
-      .panel-kicker {
-        margin: 0;
-        color: var(--muted);
-        font-size: 12px;
-        font-weight: 800;
-        letter-spacing: 0.08em;
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
         text-transform: uppercase;
+        color: var(--muted-strong);
       }
 
       .result-count {
         color: var(--muted);
         font-size: 13px;
-      }
-
-      .status-line {
-        min-height: 20px;
-        padding: 10px 18px 0;
-        color: var(--muted);
-        font-size: 13px;
-        line-height: 1.5;
-      }
-
-      .status-line[data-error="true"] {
-        color: var(--danger);
+        font-variant-numeric: tabular-nums;
       }
 
       .results {
-        display: grid;
-        gap: 0;
         overflow: auto;
+        scroll-behavior: smooth;
+      }
+
+      .results::-webkit-scrollbar {
+        width: 10px;
+      }
+      .results::-webkit-scrollbar-thumb {
+        background: var(--line);
+        border-radius: 999px;
+        border: 2px solid var(--surface);
+      }
+      .results::-webkit-scrollbar-thumb:hover {
+        background: var(--line-strong);
       }
 
       .result-card {
         position: relative;
+        display: block;
+        width: 100%;
+        text-align: left;
         padding: 16px 18px;
         border: 0;
+        border-radius: 0;
         border-bottom: 1px solid var(--line);
         background: transparent;
         cursor: pointer;
-        transition: background 120ms ease, border-color 120ms ease;
+        transition: background var(--transition), padding-left var(--transition);
+        font-weight: 400;
+        color: var(--text);
       }
 
-      .result-card:hover,
-      .result-card:focus-visible,
-      .result-card[data-active="true"] {
+      .result-card:hover {
         background: var(--surface-subtle);
+      }
+
+      .result-card:focus-visible {
         outline: none;
+        background: var(--surface-subtle);
+        box-shadow: inset 3px 0 0 var(--accent);
+      }
+
+      .result-card[data-active="true"] {
+        background: linear-gradient(90deg, var(--accent-soft) 0%, rgba(252, 251, 248, 0) 80%);
       }
 
       .result-card[data-active="true"]::before {
         content: "";
         position: absolute;
-        inset: 10px auto 10px 0;
+        inset: 12px auto 12px 0;
         width: 3px;
         border-radius: 99px;
         background: var(--accent);
-      }
-
-      .result-card[data-active="true"] {
-        background: linear-gradient(90deg, rgba(226, 240, 237, 0.82) 0%, rgba(252, 251, 248, 0.96) 28%, rgba(252, 251, 248, 0.96) 100%);
       }
 
       .result-topline {
@@ -387,159 +654,194 @@ function renderLibraryPage() {
         gap: 12px;
       }
 
-      .result-title {
+      .result-domain {
         margin: 0;
-        font-size: 17px;
-        font-weight: 760;
-        line-height: 1.34;
-      }
-
-      .result-url,
-      .result-domain,
-      .result-meta,
-      .result-tags,
-      .detail-meta,
-      .detail-url,
-      .empty-copy,
-      .auth-copy,
-      .token-hint {
+        font-size: 11.5px;
         color: var(--muted);
-        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        text-transform: lowercase;
       }
 
-      .result-domain,
-      .result-meta,
-      .result-tags,
-      .result-excerpt,
-      .detail-url,
-      .detail-excerpt,
-      .detail-content,
-      .detail-description,
-      .reader-copy {
-        margin: 8px 0 0;
+      .result-title {
+        margin: 4px 0 0;
+        font-size: 15.5px;
+        font-weight: 650;
+        line-height: 1.34;
+        letter-spacing: -0.005em;
       }
 
-      .result-excerpt,
-      .detail-excerpt,
-      .detail-content {
-        font-size: 14px;
-        line-height: 1.68;
+      .result-meta {
+        margin: 0;
+        font-size: 12px;
+        color: var(--muted);
+        white-space: nowrap;
+        font-variant-numeric: tabular-nums;
+        flex-shrink: 0;
       }
 
       .result-excerpt {
+        margin: 8px 0 0;
+        font-size: 13.5px;
+        line-height: 1.55;
         color: var(--muted-strong);
         display: -webkit-box;
-        -webkit-line-clamp: 3;
+        -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
       }
 
-      .result-meta {
-        white-space: nowrap;
+      .result-tags {
+        margin: 10px 0 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
       }
 
-      .reader-hero {
-        padding: 24px 24px 22px;
-        background:
-          linear-gradient(180deg, rgba(226, 240, 237, 0.7) 0%, rgba(255, 255, 255, 0.92) 100%);
+      .tag-chip {
+        display: inline-flex;
+        align-items: center;
+        padding: 2px 8px;
+        font-size: 11.5px;
+        font-weight: 600;
+        color: var(--accent-strong);
+        background: var(--accent-soft);
+        border-radius: 999px;
       }
 
-      .reader-title {
-        font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
-        font-size: clamp(28px, 3vw, 42px);
-        line-height: 1.04;
-        font-weight: 700;
-      }
-
-      .reader-copy {
-        max-width: 62ch;
-        color: var(--muted);
-        font-size: 15px;
-        line-height: 1.7;
-      }
-
+      /* ---------- Detail panel ---------- */
       .detail-panel {
         overflow: hidden;
-        min-height: 520px;
       }
 
       .detail-card {
-        padding: 24px;
+        padding: 26px 28px 22px;
       }
 
-      .detail-header {
-        display: grid;
-        gap: 10px;
-        padding-bottom: 18px;
-        border-bottom: 1px solid var(--line);
+      .detail-domain {
+        margin: 0;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 10px;
+        background: var(--surface-muted);
+        border-radius: 999px;
+        color: var(--muted-strong);
+        font-size: 11.5px;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        text-transform: lowercase;
+      }
+
+      .detail-title {
+        margin: 12px 0 0;
+        font-size: clamp(22px, 2.4vw, 30px);
+        line-height: 1.2;
+        letter-spacing: -0.01em;
+        font-weight: 700;
+      }
+
+      .detail-url {
+        margin: 8px 0 0;
+        font-size: 13px;
+        color: var(--muted);
+        word-break: break-all;
       }
 
       .detail-url a {
         color: var(--accent-strong);
         text-decoration: none;
-        word-break: break-word;
       }
 
       .detail-url a:hover {
         text-decoration: underline;
       }
 
+      .detail-meta-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 16px;
+      }
+
+      .meta-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 10px;
+        background: var(--surface-muted);
+        border-radius: 999px;
+        color: var(--muted-strong);
+        font-size: 12.5px;
+      }
+
+      .meta-chip svg {
+        width: 12px;
+        height: 12px;
+        color: var(--muted);
+      }
+
+      .meta-chip strong {
+        color: var(--text);
+        font-weight: 600;
+      }
+
       .detail-description {
+        margin: 18px 0 0;
+        max-width: 64ch;
         color: var(--muted-strong);
         font-size: 15px;
         line-height: 1.7;
-        max-width: 64ch;
       }
 
-      .detail-grid {
-        display: grid;
-        grid-template-columns: 220px minmax(0, 1fr);
-        gap: 22px;
+      .detail-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 22px;
+        padding-top: 20px;
+        border-top: 1px solid var(--line);
+      }
+
+      .detail-actions .grow {
+        flex: 1;
+      }
+
+      .content-toggle {
+        gap: 6px;
+      }
+
+      .content-toggle .chevron {
+        width: 14px;
+        height: 14px;
+        transition: transform var(--transition);
+      }
+
+      .content-toggle[data-expanded="true"] .chevron {
+        transform: rotate(180deg);
+      }
+
+      .detail-content-wrap {
         margin-top: 18px;
-      }
-
-      .detail-sidebar {
         display: grid;
-        align-content: start;
-        gap: 16px;
+        grid-template-rows: 0fr;
+        transition: grid-template-rows 320ms cubic-bezier(0.4, 0, 0.2, 1);
       }
 
-      .meta-block {
-        padding: 14px;
-        border: 1px solid var(--line);
-        border-radius: 8px;
-        background: var(--surface-subtle);
+      .detail-content-wrap[data-expanded="true"] {
+        grid-template-rows: 1fr;
       }
 
-      .meta-label {
-        margin: 0 0 8px;
-        color: var(--muted);
-        font-size: 11px;
-        font-weight: 800;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-      }
-
-      .meta-value {
-        margin: 0;
-        font-size: 14px;
-        line-height: 1.55;
-      }
-
-      .detail-body {
-        min-width: 0;
-      }
-
-      .detail-body h3 {
-        margin: 0 0 10px;
-        font-size: 18px;
+      .detail-content-wrap > .detail-content-inner {
+        overflow: hidden;
       }
 
       .detail-content {
-        padding: 16px 18px;
+        padding: 22px 24px;
+        margin: 0;
         border: 1px solid var(--line);
-        border-radius: 8px;
-        background: #fffefc;
+        border-radius: var(--radius);
+        background: #fffefb;
         color: var(--muted-strong);
         white-space: pre-wrap;
         word-break: break-word;
@@ -549,70 +851,201 @@ function renderLibraryPage() {
         line-height: 1.82;
       }
 
-      .detail-actions {
-        margin-top: 16px;
+      /* ---------- Empty / loading ---------- */
+      .empty-state {
+        display: grid;
+        place-items: center;
+        gap: 12px;
+        padding: 48px 24px;
+        text-align: center;
+        color: var(--muted-strong);
       }
 
-      .empty-state,
-      .auth-state {
-        padding: 22px;
-        border: 1px dashed var(--line-strong);
-        border-radius: 8px;
-        background: var(--surface-subtle);
+      .empty-state .empty-icon {
+        display: grid;
+        place-items: center;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: var(--surface-muted);
+        color: var(--muted);
       }
 
-      .empty-state h3,
-      .auth-state h3 {
+      .empty-state .empty-icon svg {
+        width: 24px;
+        height: 24px;
+      }
+
+      .empty-state h3 {
         margin: 0;
-        font-size: 18px;
+        font-size: 16px;
+        font-weight: 650;
+        color: var(--text);
       }
 
-      .empty-copy,
-      .auth-copy,
-      .token-hint {
-        margin: 10px 0 0;
-        line-height: 1.65;
+      .empty-state p {
+        margin: 0;
+        max-width: 38ch;
+        font-size: 13.5px;
+        line-height: 1.55;
+        color: var(--muted);
       }
 
-      .field {
+      .skeleton-list {
+        display: grid;
+      }
+
+      .skeleton-row {
         display: grid;
         gap: 8px;
+        padding: 16px 18px;
+        border-bottom: 1px solid var(--line);
       }
 
-      .field span {
-        font-size: 13px;
-        font-weight: 760;
+      .skeleton-bar {
+        height: 10px;
+        border-radius: 4px;
+        background: linear-gradient(90deg, var(--surface-muted) 0%, #ece8de 50%, var(--surface-muted) 100%);
+        background-size: 200% 100%;
+        animation: shimmer 1.4s infinite linear;
       }
 
-      .auth-state .field {
-        margin-top: 14px;
+      .skeleton-bar.short { width: 40%; }
+      .skeleton-bar.medium { width: 70%; }
+      .skeleton-bar.tall { height: 16px; }
+
+      @keyframes shimmer {
+        0% { background-position: 200% 0; }
+        100% { background-position: -200% 0; }
       }
 
-      .auth-state .settings-actions {
-        margin-top: 14px;
-      }
-
+      /* ---------- Auth panel ---------- */
       .auth-panel {
-        border-style: dashed;
+        margin-top: 18px;
+        padding: 22px 24px;
+        max-width: 520px;
+        border: 1px dashed var(--line-strong);
         background: linear-gradient(180deg, #fbfaf7 0%, #f7f4ec 100%);
-        max-width: 620px;
+        border-radius: var(--radius-lg);
       }
 
       .auth-panel[hidden] {
         display: none !important;
       }
 
+      .auth-title {
+        margin: 0;
+        font-size: 17px;
+        font-weight: 650;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .info-icon {
+        display: inline-grid;
+        place-items: center;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: var(--surface-muted);
+        color: var(--muted);
+        cursor: help;
+      }
+
+      .info-icon svg {
+        width: 11px;
+        height: 11px;
+      }
+
+      .field {
+        display: grid;
+        gap: 6px;
+        margin-top: 14px;
+      }
+
+      .field-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--muted-strong);
+      }
+
+      .field input {
+        width: 100%;
+        height: 42px;
+        padding: 0 14px;
+        border: 1px solid var(--line);
+        border-radius: var(--radius-sm);
+        background: var(--surface);
+        transition: border-color var(--transition), box-shadow var(--transition);
+      }
+
+      .field input:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px var(--accent-ring);
+        outline: none;
+      }
+
+      .auth-actions {
+        margin-top: 14px;
+      }
+
+      /* ---------- Toast ---------- */
+      .toast-host {
+        position: fixed;
+        bottom: 24px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 100;
+        pointer-events: none;
+      }
+
+      .toast {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 16px;
+        background: #17211f;
+        color: #f3eeda;
+        border-radius: 999px;
+        font-size: 13.5px;
+        box-shadow: 0 12px 36px rgba(22, 33, 31, 0.18);
+        opacity: 0;
+        transform: translateY(8px);
+        transition: opacity 200ms ease, transform 200ms ease;
+      }
+
+      .toast[data-visible="true"] {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .toast[data-error="true"] {
+        background: #5d2620;
+        color: #fde8e3;
+      }
+
+      .toast svg {
+        width: 14px;
+        height: 14px;
+      }
+
       [hidden] {
         display: none !important;
       }
 
+      /* ---------- Responsive ---------- */
       @media (max-width: 1100px) {
         .dashboard {
           grid-template-columns: 1fr;
         }
 
-        .detail-grid {
-          grid-template-columns: 1fr;
+        .results-panel {
+          min-height: 0;
+          max-height: 60vh;
         }
       }
 
@@ -622,36 +1055,24 @@ function renderLibraryPage() {
           padding-top: 20px;
         }
 
-        .topline {
+        .masthead {
           flex-direction: column;
           align-items: flex-start;
+          gap: 14px;
         }
 
-        .toolbar-top,
-        .toolbar-bottom {
-          grid-template-columns: 1fr;
-        }
-
-        .top-actions,
-        .settings-actions,
-        .detail-actions,
-        .secondary-actions,
-        .toolbar-actions,
         .filter-row {
+          gap: 8px;
+        }
+
+        .filter-row .stats-strip {
+          margin-left: 0;
           width: 100%;
+          justify-content: space-between;
         }
 
-        button {
-          width: 100%;
-        }
-
-        .result-topline {
-          flex-direction: column;
-        }
-
-        .results-panel {
-          min-height: auto;
-          max-height: none;
+        .detail-card {
+          padding: 22px 18px;
         }
       }
     </style>
@@ -659,98 +1080,93 @@ function renderLibraryPage() {
   <body>
     <main class="shell">
       <header class="masthead">
-        <div class="topline">
-          <div>
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">BTW</div>
+          <div class="brand-text">
             <p class="eyebrow">Behind The Wall</p>
             <h1>Bibliothek</h1>
-            <p class="lede">Deine gespeicherten Seiten an einem Ort. Die Extension sammelt ein, hier sichtest, suchst und liest du ruhig weiter.</p>
-          </div>
-          <div class="top-actions">
-            <button id="focus-search" class="ghost-button" type="button">Suche fokussieren</button>
-            <button id="refresh-results" class="primary-button" type="button">Neu laden</button>
           </div>
         </div>
-
-        <section class="toolbar">
-          <div class="toolbar-top">
-            <input id="search-input" class="search-input" type="search" placeholder="Suche nach Titel, URL, Volltext oder Tags">
-            <button id="clear-search" class="ghost-button" type="button">Zurücksetzen</button>
-          </div>
-          <div class="toolbar-bottom">
-            <div class="filter-row">
-              <label class="pill">
-                <span>Sortierung</span>
-                <select id="sort-select">
-                  <option value="updated-desc">Neueste zuerst</option>
-                  <option value="updated-asc">Älteste zuerst</option>
-                  <option value="title-asc">Titel A–Z</option>
-                </select>
-              </label>
-              <label class="pill">
-                <input id="tag-filter" type="checkbox">
-                <span>Nur mit Tags</span>
-              </label>
-            </div>
-            <div class="toolbar-actions">
-              <div class="quick-stats">
-                <div class="quick-stat"><strong id="stat-total">0</strong><span>Gesamt</span></div>
-                <div class="quick-stat"><strong id="stat-visible">0</strong><span>Im Blick</span></div>
-                <div class="quick-stat"><strong id="stat-updated">-</strong><span>Zuletzt</span></div>
-              </div>
-              <div class="secondary-actions">
-                <button id="toggle-auth" class="ghost-button" type="button">Zugang</button>
-                <button id="logout-button" class="ghost-button" type="button">Abmelden</button>
-              </div>
-            </div>
-          </div>
-        </section>
+        <div class="header-actions">
+          <button id="toggle-auth" class="auth-pill" type="button" data-state="off" data-tooltip="Sitzungsstatus" data-tooltip-anchor="end">
+            <span class="auth-dot" aria-hidden="true"></span>
+            <span id="auth-pill-label">Nicht verbunden</span>
+          </button>
+          <button id="logout-button" class="icon-button" type="button" data-tooltip="Abmelden" data-tooltip-anchor="end" hidden>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          </button>
+        </div>
       </header>
 
-      <section class="dashboard">
-        <div class="column">
-          <section class="panel results-panel">
-            <div class="results-header">
-              <div class="results-title-wrap">
-                <p class="panel-kicker">Ablage</p>
-                <h2>Ergebnisse</h2>
-              </div>
-              <p id="result-count" class="result-count">0 Einträge</p>
-            </div>
-            <p id="status-line" class="status-line" aria-live="polite"></p>
-            <section id="results" class="results" aria-live="polite"></section>
-          </section>
+      <section class="toolbar">
+        <div class="search-shell" id="search-shell">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input id="search-input" type="search" placeholder="Suche nach Titel, URL, Volltext oder Tag" autocomplete="off" spellcheck="false">
+          <span class="kbd-hint" aria-hidden="true"><kbd>/</kbd></span>
+          <button id="clear-search" class="search-clear" type="button" data-tooltip="Zurücksetzen" aria-label="Suche zurücksetzen">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
         </div>
+        <div class="filter-row">
+          <div class="select-shell" data-tooltip="Sortierung">
+            <select id="sort-select" aria-label="Sortierung">
+              <option value="updated-desc">Neueste zuerst</option>
+              <option value="updated-asc">Älteste zuerst</option>
+              <option value="title-asc">Titel A–Z</option>
+            </select>
+          </div>
+          <label class="switch" data-tooltip="Nur Einträge mit Tags zeigen">
+            <input id="tag-filter" type="checkbox">
+            <span class="switch-track" aria-hidden="true"></span>
+            <span>Nur mit Tags</span>
+          </label>
+          <div class="stats-strip" aria-live="polite">
+            <span><strong id="stat-total">0</strong>Gesamt</span>
+            <span class="sep" aria-hidden="true"></span>
+            <span><strong id="stat-visible">0</strong>Sichtbar</span>
+            <span class="sep" aria-hidden="true"></span>
+            <span data-tooltip="Letzte Aktualisierung"><strong id="stat-updated">–</strong>Zuletzt</span>
+          </div>
+        </div>
+      </section>
 
-        <div class="column">
-          <section class="reader-hero">
-            <p class="panel-kicker">Reader</p>
-            <h2 class="reader-title">Ein Ort zum Wiederfinden, nicht nur zum Wegklicken.</h2>
-            <p class="reader-copy">Wähle links einen gespeicherten Eintrag aus. Rechts bekommst du Quelle, Zeitpunkte, Metadaten und den extrahierten Text in einer ruhigeren Lesefläche.</p>
-          </section>
+      <section class="dashboard">
+        <section class="panel results-panel">
+          <div class="results-header">
+            <h2>Ergebnisse</h2>
+            <p id="result-count" class="result-count">0 Einträge</p>
+          </div>
+          <section id="results" class="results" aria-live="polite"></section>
+        </section>
 
-          <section id="detail-panel" class="panel detail-panel">
-            <div class="empty-state">
-              <h3>Noch kein Eintrag ausgewählt</h3>
-              <p class="empty-copy">Sobald du links etwas auswählst, wird daraus hier eine lesbare Detailansicht mit Quelle, Metadaten und Volltext.</p>
-            </div>
-          </section>
+        <section id="detail-panel" class="panel detail-panel"></section>
+      </section>
 
-          <section id="auth-panel" class="panel auth-state auth-panel">
-            <h3 class="auth-title">Zugang zum Backend</h3>
-            <p class="auth-copy">Diese Web-Oberfläche meldet sich einmal mit deinem API-Token an und arbeitet danach mit einer Sitzung auf dieser Domain weiter.</p>
-            <label class="field">
-              <span>API-Token</span>
-              <input id="token-input" type="password" placeholder="Token eingeben">
-            </label>
-            <p class="token-hint">Das Token bleibt nicht im Frontend liegen. Der Server setzt nur eine Sitzung für diese Domain.</p>
-            <div class="settings-actions">
-              <button id="login-button" class="primary-button" type="button">Anmelden</button>
-              <button id="clear-token" class="ghost-button" type="button">Feld leeren</button>
-            </div>
-          </section>
+      <section id="auth-panel" class="auth-panel" hidden>
+        <h3 class="auth-title">
+          Zugang zum Backend
+          <span class="info-icon" data-tooltip="Einmal anmelden mit API-Token. Der Server setzt nur eine Sitzung für diese Domain." tabindex="0">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          </span>
+        </h3>
+        <label class="field">
+          <span class="field-label">
+            API-Token
+            <span class="info-icon" data-tooltip="Das Token bleibt nicht im Frontend liegen." tabindex="0">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            </span>
+          </span>
+          <input id="token-input" type="password" placeholder="Token eingeben" autocomplete="current-password">
+        </label>
+        <div class="auth-actions">
+          <button id="login-button" class="primary-button" type="button">Anmelden</button>
         </div>
       </section>
     </main>
+
+    <div class="toast-host" aria-live="polite">
+      <div id="toast" class="toast" role="status"></div>
+    </div>
 
     <script>
       const state = {
@@ -762,44 +1178,49 @@ function renderLibraryPage() {
         totalCount: 0,
         items: [],
         visibleItems: [],
-        selectedId: ""
+        selectedId: "",
+        contentExpanded: false
       };
 
       const els = {
+        searchShell: document.querySelector("#search-shell"),
         searchInput: document.querySelector("#search-input"),
         sortSelect: document.querySelector("#sort-select"),
         tagFilter: document.querySelector("#tag-filter"),
-        refreshButton: document.querySelector("#refresh-results"),
         clearSearchButton: document.querySelector("#clear-search"),
-        focusSearchButton: document.querySelector("#focus-search"),
         toggleAuthButton: document.querySelector("#toggle-auth"),
+        authPillLabel: document.querySelector("#auth-pill-label"),
         logoutButton: document.querySelector("#logout-button"),
-        statusLine: document.querySelector("#status-line"),
         results: document.querySelector("#results"),
         detailPanel: document.querySelector("#detail-panel"),
         authPanel: document.querySelector("#auth-panel"),
         tokenInput: document.querySelector("#token-input"),
         loginButton: document.querySelector("#login-button"),
-        clearTokenButton: document.querySelector("#clear-token"),
         statTotal: document.querySelector("#stat-total"),
         statVisible: document.querySelector("#stat-visible"),
         statUpdated: document.querySelector("#stat-updated"),
-        resultCount: document.querySelector("#result-count")
+        resultCount: document.querySelector("#result-count"),
+        toast: document.querySelector("#toast")
       };
 
       let searchTimer = 0;
+      let toastTimer = 0;
 
       document.addEventListener("keydown", (event) => {
-        if (event.key === "/" && document.activeElement !== els.searchInput) {
+        const inField = event.target.matches && event.target.matches("input, select, textarea");
+
+        if (event.key === "/" && !inField) {
           event.preventDefault();
           els.searchInput.focus();
+          els.searchInput.select();
+          return;
         }
 
         if (event.key === "Escape") {
           if (document.activeElement === els.searchInput && els.searchInput.value) {
-            els.searchInput.value = "";
-            state.query = "";
-            void loadItems();
+            clearSearch();
+          } else if (state.contentExpanded) {
+            toggleContent(false);
           } else if (state.selectedId) {
             state.selectedId = "";
             renderAll();
@@ -809,10 +1230,15 @@ function renderLibraryPage() {
 
       els.searchInput.addEventListener("input", () => {
         state.query = els.searchInput.value.trim();
+        els.searchShell.classList.toggle("has-value", els.searchInput.value.length > 0);
         window.clearTimeout(searchTimer);
         searchTimer = window.setTimeout(() => {
           void loadItems();
         }, 180);
+      });
+
+      els.clearSearchButton.addEventListener("click", () => {
+        clearSearch();
       });
 
       els.sortSelect.addEventListener("change", () => {
@@ -827,23 +1253,12 @@ function renderLibraryPage() {
         renderAll();
       });
 
-      els.refreshButton.addEventListener("click", () => {
-        void loadItems();
-      });
-
-      els.clearSearchButton.addEventListener("click", () => {
-        els.searchInput.value = "";
-        state.query = "";
-        void loadItems();
-      });
-
-      els.focusSearchButton.addEventListener("click", () => {
-        els.searchInput.focus();
-      });
-
       els.toggleAuthButton.addEventListener("click", () => {
         els.authPanel.hidden = !els.authPanel.hidden;
-        syncAuthButtonLabel();
+        if (!els.authPanel.hidden) {
+          els.tokenInput.focus();
+        }
+        syncAuthIndicator();
       });
 
       els.logoutButton.addEventListener("click", async () => {
@@ -854,21 +1269,22 @@ function renderLibraryPage() {
           state.visibleItems = [];
           state.selectedId = "";
           els.authPanel.hidden = false;
-          syncAuthButtonLabel();
-          setStatus("Sitzung beendet.");
+          showToast("Abgemeldet.");
           renderAll();
         } catch (error) {
-          setStatus(error.message || "Abmelden fehlgeschlagen.", true);
+          showToast(error.message || "Abmelden fehlgeschlagen.", true);
         }
       });
 
-      els.loginButton.addEventListener("click", async () => {
-        await authenticate();
+      els.loginButton.addEventListener("click", () => {
+        void authenticate();
       });
 
-      els.clearTokenButton.addEventListener("click", () => {
-        els.tokenInput.value = "";
-        els.tokenInput.focus();
+      els.tokenInput.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          void authenticate();
+        }
       });
 
       els.results.addEventListener("click", async (event) => {
@@ -884,22 +1300,44 @@ function renderLibraryPage() {
           return;
         }
 
-        state.selectedId = card.dataset.itemId;
-        renderResults();
-        renderDetail();
+        if (state.selectedId !== card.dataset.itemId) {
+          state.selectedId = card.dataset.itemId;
+          state.contentExpanded = false;
+          renderResults();
+          renderDetail();
+        }
+      });
+
+      els.results.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter" && event.key !== " ") return;
+        const card = event.target.closest("[data-item-id]");
+        if (!card) return;
+        event.preventDefault();
+        if (state.selectedId !== card.dataset.itemId) {
+          state.selectedId = card.dataset.itemId;
+          state.contentExpanded = false;
+          renderResults();
+          renderDetail();
+        }
       });
 
       els.detailPanel.addEventListener("click", async (event) => {
-        const deleteButton = event.target.closest("[data-delete-id]");
-        const openButton = event.target.closest("[data-open-source]");
+        const toggleButton = event.target.closest("[data-toggle-content]");
+        if (toggleButton) {
+          toggleContent(!state.contentExpanded);
+          return;
+        }
 
+        const openButton = event.target.closest("[data-open-source]");
         if (openButton) {
           const item = state.visibleItems.find((entry) => entry.id === state.selectedId);
           if (item) {
             window.open(item.url, "_blank", "noopener,noreferrer");
           }
+          return;
         }
 
+        const deleteButton = event.target.closest("[data-delete-id]");
         if (deleteButton) {
           await deleteItem(deleteButton.dataset.deleteId);
         }
@@ -912,8 +1350,27 @@ function renderLibraryPage() {
         if (state.authenticated) {
           await loadItems();
         } else {
-          setStatus("Bitte melde dich mit deinem API-Token an, um die Bibliothek zu laden.");
           renderAll();
+        }
+      }
+
+      function clearSearch() {
+        els.searchInput.value = "";
+        els.searchShell.classList.remove("has-value");
+        state.query = "";
+        void loadItems();
+      }
+
+      function toggleContent(open) {
+        state.contentExpanded = Boolean(open);
+        const wrap = els.detailPanel.querySelector(".detail-content-wrap");
+        const button = els.detailPanel.querySelector("[data-toggle-content]");
+        if (!wrap || !button) return;
+        wrap.dataset.expanded = state.contentExpanded ? "true" : "false";
+        button.dataset.expanded = state.contentExpanded ? "true" : "false";
+        const label = button.querySelector(".toggle-label");
+        if (label) {
+          label.textContent = state.contentExpanded ? "Volltext einklappen" : "Volltext anzeigen";
         }
       }
 
@@ -923,29 +1380,26 @@ function renderLibraryPage() {
           const json = await response.json().catch(() => ({}));
           state.authenticated = Boolean(json.authenticated);
           els.authPanel.hidden = state.authenticated;
-          syncAuthButtonLabel();
         } catch {
           state.authenticated = false;
           els.authPanel.hidden = false;
-          syncAuthButtonLabel();
         }
+        syncAuthIndicator();
       }
 
       async function authenticate() {
         const token = els.tokenInput.value.trim();
         if (!token) {
-          setStatus("Bitte gib zuerst ein API-Token ein.", true);
+          showToast("Bitte gib zuerst ein API-Token ein.", true);
           els.authPanel.hidden = false;
-          syncAuthButtonLabel();
+          els.tokenInput.focus();
           return;
         }
 
         try {
           const response = await fetch("/auth/session", {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ token })
           });
           const json = await response.json().catch(() => ({}));
@@ -954,15 +1408,15 @@ function renderLibraryPage() {
           }
           state.authenticated = true;
           els.authPanel.hidden = true;
-          syncAuthButtonLabel();
           els.tokenInput.value = "";
-          setStatus("Sitzung aktiv.");
+          syncAuthIndicator();
+          showToast("Sitzung aktiv.");
           await loadItems();
         } catch (error) {
           state.authenticated = false;
           els.authPanel.hidden = false;
-          syncAuthButtonLabel();
-          setStatus(error.message || "Anmeldung fehlgeschlagen.", true);
+          syncAuthIndicator();
+          showToast(error.message || "Anmeldung fehlgeschlagen.", true);
         }
       }
 
@@ -974,7 +1428,6 @@ function renderLibraryPage() {
 
         state.loading = true;
         renderResults();
-        setStatus("Lade Bibliothek...");
 
         try {
           const search = new URLSearchParams();
@@ -991,16 +1444,11 @@ function renderLibraryPage() {
           state.items = json.items || [];
           state.totalCount = Number(json.totalCount || state.items.length || 0);
           deriveVisibleItems();
-          setStatus(
-            state.query
-              ? state.visibleItems.length + ' Treffer für "' + state.query + '".'
-              : state.visibleItems.length + " Einträge geladen."
-          );
         } catch (error) {
           state.items = [];
           state.visibleItems = [];
           state.selectedId = "";
-          setStatus(error.message || "Bibliothek konnte nicht geladen werden.", true);
+          showToast(error.message || "Bibliothek konnte nicht geladen werden.", true);
         } finally {
           state.loading = false;
           renderAll();
@@ -1016,10 +1464,10 @@ function renderLibraryPage() {
           if (!response.ok) {
             throw new Error(json.error || "Eintrag konnte nicht gelöscht werden.");
           }
-          setStatus("Eintrag gelöscht.");
+          showToast("Eintrag gelöscht.");
           await loadItems();
         } catch (error) {
-          setStatus(error.message || "Eintrag konnte nicht gelöscht werden.", true);
+          showToast(error.message || "Eintrag konnte nicht gelöscht werden.", true);
         }
       }
 
@@ -1043,7 +1491,11 @@ function renderLibraryPage() {
         state.visibleItems = items;
 
         if (!state.selectedId || !state.visibleItems.some((item) => item.id === state.selectedId)) {
-          state.selectedId = state.visibleItems[0]?.id || "";
+          const newSelected = state.visibleItems[0]?.id || "";
+          if (newSelected !== state.selectedId) {
+            state.contentExpanded = false;
+          }
+          state.selectedId = newSelected;
         }
       }
 
@@ -1051,58 +1503,72 @@ function renderLibraryPage() {
         renderStats();
         renderResults();
         renderDetail();
-        syncAuthButtonLabel();
+        syncAuthIndicator();
       }
 
-      function syncAuthButtonLabel() {
-        els.toggleAuthButton.textContent = state.authenticated
-          ? (els.authPanel.hidden ? "Verbunden" : "Sitzung")
-          : "Zugang";
-        els.logoutButton.hidden = !state.authenticated;
+      function syncAuthIndicator() {
+        if (state.authenticated) {
+          els.toggleAuthButton.dataset.state = "ok";
+          els.authPillLabel.textContent = els.authPanel.hidden ? "Verbunden" : "Sitzung";
+          els.logoutButton.hidden = false;
+        } else {
+          els.toggleAuthButton.dataset.state = "off";
+          els.authPillLabel.textContent = "Anmelden";
+          els.logoutButton.hidden = true;
+        }
       }
 
       function renderStats() {
         els.statTotal.textContent = String(state.totalCount);
         els.statVisible.textContent = String(state.visibleItems.length);
-        els.statUpdated.textContent = state.visibleItems[0] ? formatShortDate(state.visibleItems[0].updatedAt) : "-";
-        els.resultCount.textContent = state.visibleItems.length + " Einträge";
+        els.statUpdated.textContent = state.visibleItems[0]
+          ? formatShortDate(state.visibleItems[0].updatedAt)
+          : "–";
+        const word = state.visibleItems.length === 1 ? "Eintrag" : "Einträge";
+        els.resultCount.textContent = state.visibleItems.length + " " + word;
       }
 
       function renderResults() {
         if (!state.authenticated) {
-          els.results.innerHTML = emptyState(
+          els.results.innerHTML = renderEmpty(
+            iconKey(),
             "Anmeldung fehlt",
-            "Öffne den Bereich Zugang, melde dich mit deinem API-Token an und die Bibliothek lädt sofort los."
+            "Melde dich oben rechts mit deinem API-Token an."
           );
           return;
         }
 
         if (state.loading) {
-          els.results.innerHTML = emptyState(
-            "Bibliothek lädt",
-            "Ich hole gerade deine gespeicherten Seiten und sortiere sie in diese Ansicht ein."
-          );
+          els.results.innerHTML = renderSkeleton(4);
           return;
         }
 
         if (!state.visibleItems.length) {
-          els.results.innerHTML = emptyState(
-            state.query || state.onlyTagged ? "Keine Treffer" : "Noch keine Einträge",
-            state.query || state.onlyTagged
-              ? "Mit der aktuellen Suche oder dem aktiven Filter ist im Moment nichts sichtbar."
-              : "Speichere zuerst eine Seite über die Extension, dann taucht sie hier automatisch auf."
-          );
+          if (state.query || state.onlyTagged) {
+            els.results.innerHTML = renderEmpty(
+              iconSearch(),
+              "Keine Treffer",
+              "Suche oder Filter anpassen, um Einträge zu sehen."
+            );
+          } else {
+            els.results.innerHTML = renderEmpty(
+              iconBookmark(),
+              "Noch leer",
+              "Speichere die erste Seite über die Extension."
+            );
+          }
           return;
         }
 
         els.results.innerHTML = state.visibleItems.map((item) => {
           const tags = item.tags?.length
-            ? '<p class="result-tags">' + item.tags.map(escapeHtml).join(" · ") + '</p>'
+            ? '<div class="result-tags">' + item.tags.map((t) => '<span class="tag-chip">' + escapeHtml(t) + '</span>').join("") + '</div>'
             : "";
           const active = item.id === state.selectedId ? "true" : "false";
           const domain = escapeHtml(formatDomain(item.normalizedUrl || item.url));
+          const excerpt = item.excerpt || item.description;
 
-          return '<article class="result-card" tabindex="0" data-item-id="' + escapeAttr(item.id) + '" data-active="' + active + '">' +
+          return '<button class="result-card" type="button" data-item-id="' + escapeAttr(item.id) + '" data-active="' + active + '">' +
             '<div class="result-topline">' +
               '<div>' +
                 '<p class="result-domain">' + domain + '</p>' +
@@ -1110,99 +1576,123 @@ function renderLibraryPage() {
               '</div>' +
               '<p class="result-meta">' + escapeHtml(formatRelativeDate(item.updatedAt)) + '</p>' +
             '</div>' +
+            (excerpt ? '<p class="result-excerpt">' + escapeHtml(excerpt) + '</p>' : "") +
             tags +
-            '<p class="result-excerpt">' + escapeHtml(item.excerpt || item.description || "Kein Auszug verfügbar.") + '</p>' +
-            '<p class="result-url">' + escapeHtml(item.normalizedUrl || item.url) + '</p>' +
-          '</article>';
+          '</button>';
         }).join("");
       }
 
       function renderDetail() {
         const item = state.visibleItems.find((entry) => entry.id === state.selectedId);
         if (!item) {
-          els.detailPanel.innerHTML = emptyState(
-            "Noch kein Eintrag ausgewählt",
-            "Wähle links einen gespeicherten Artikel aus. Dann bekommst du Quelle, Metadaten und den gesicherten Volltext in einer ruhigeren Detailansicht."
+          els.detailPanel.innerHTML = renderEmpty(
+            iconReader(),
+            "Kein Eintrag gewählt",
+            "Wähle links einen Eintrag, um Quelle, Metadaten und Volltext zu sehen."
           );
           return;
         }
 
-        const tags = item.tags?.length
-          ? '<div class="meta-block"><p class="meta-label">Tags</p><p class="meta-value">' + item.tags.map(escapeHtml).join(" · ") + "</p></div>"
+        const tagsRow = item.tags?.length
+          ? item.tags.map((t) => '<span class="tag-chip">' + escapeHtml(t) + '</span>').join("")
           : "";
+
+        const hasContent = Boolean(item.content);
+        const expanded = state.contentExpanded ? "true" : "false";
+        const toggleLabel = state.contentExpanded ? "Volltext einklappen" : "Volltext anzeigen";
 
         els.detailPanel.innerHTML =
           '<article class="detail-card">' +
-            '<div class="detail-header">' +
-              '<p class="panel-kicker">' + escapeHtml(formatDomain(item.normalizedUrl || item.url)) + '</p>' +
-              '<h2 class="detail-title">' + escapeHtml(item.title || item.normalizedUrl) + '</h2>' +
-              '<p class="detail-url"><a href="' + escapeAttr(item.url) + '" target="_blank" rel="noreferrer">' + escapeHtml(item.url) + "</a></p>" +
-              '<p class="detail-description">' + escapeHtml(item.excerpt || item.description || "Kein Auszug verfügbar.") + "</p>" +
-              '<div class="detail-actions">' +
-                '<button class="primary-button" type="button" data-open-source>Quelle öffnen</button>' +
-                '<button class="danger-button" type="button" data-delete-id="' + escapeAttr(item.id) + '">Löschen</button>' +
-              "</div>" +
-            "</div>" +
-            '<div class="detail-grid">' +
-              '<aside class="detail-sidebar">' +
-                '<div class="meta-block"><p class="meta-label">Gespeichert</p><p class="meta-value">' + escapeHtml(formatDate(item.createdAt)) + "</p></div>" +
-                '<div class="meta-block"><p class="meta-label">Aktualisiert</p><p class="meta-value">' + escapeHtml(formatDate(item.updatedAt)) + "</p></div>" +
-                tags +
-              "</aside>" +
-              '<div class="detail-body">' +
-                '<h3>Gesicherter Text</h3>' +
-                '<div class="detail-content">' + escapeHtml(item.content || item.description || item.excerpt || "Kein Text gespeichert.") + "</div>" +
-              "</div>" +
-            "</div>" +
-          "</article>";
+            '<p class="detail-domain">' + escapeHtml(formatDomain(item.normalizedUrl || item.url)) + '</p>' +
+            '<h2 class="detail-title">' + escapeHtml(item.title || item.normalizedUrl) + '</h2>' +
+            '<p class="detail-url"><a href="' + escapeAttr(item.url) + '" target="_blank" rel="noreferrer">' + escapeHtml(item.url) + '</a></p>' +
+            '<div class="detail-meta-row">' +
+              '<span class="meta-chip" data-tooltip="Gespeichert am">' + iconCalendar() + '<strong>' + escapeHtml(formatDate(item.createdAt)) + '</strong></span>' +
+              '<span class="meta-chip" data-tooltip="Zuletzt aktualisiert">' + iconClock() + '<strong>' + escapeHtml(formatDate(item.updatedAt)) + '</strong></span>' +
+              tagsRow +
+            '</div>' +
+            (item.excerpt || item.description ? '<p class="detail-description">' + escapeHtml(item.excerpt || item.description) + '</p>' : "") +
+            '<div class="detail-actions">' +
+              '<button class="primary-button" type="button" data-open-source>' + iconExternal() + 'Quelle öffnen</button>' +
+              (hasContent
+                ? '<button class="ghost-button content-toggle" type="button" data-toggle-content data-expanded="' + expanded + '">' + iconChevron() + '<span class="toggle-label">' + toggleLabel + '</span></button>'
+                : "") +
+              '<span class="grow"></span>' +
+              '<button class="danger-button icon-button" type="button" data-delete-id="' + escapeAttr(item.id) + '" data-tooltip="Eintrag löschen" data-tooltip-anchor="end">' + iconTrash() + '</button>' +
+            '</div>' +
+            (hasContent
+              ? '<div class="detail-content-wrap" data-expanded="' + expanded + '"><div class="detail-content-inner"><div class="detail-content">' + escapeHtml(item.content) + '</div></div></div>'
+              : "") +
+          '</article>';
       }
 
-      function setStatus(message, isError = false) {
-        els.statusLine.textContent = message;
-        els.statusLine.dataset.error = isError ? "true" : "false";
+      function showToast(message, isError = false) {
+        els.toast.textContent = "";
+        els.toast.appendChild(isError ? iconNode(iconAlert()) : iconNode(iconCheck()));
+        const span = document.createElement("span");
+        span.textContent = message;
+        els.toast.appendChild(span);
+        els.toast.dataset.error = isError ? "true" : "false";
+        els.toast.dataset.visible = "true";
+        window.clearTimeout(toastTimer);
+        toastTimer = window.setTimeout(() => {
+          els.toast.dataset.visible = "false";
+        }, 2800);
+      }
+
+      function iconNode(svgString) {
+        const tpl = document.createElement("template");
+        tpl.innerHTML = svgString;
+        return tpl.content.firstChild;
+      }
+
+      function renderEmpty(icon, title, copy) {
+        return '<div class="empty-state">' +
+          '<div class="empty-icon">' + icon + '</div>' +
+          '<h3>' + escapeHtml(title) + '</h3>' +
+          '<p>' + escapeHtml(copy) + '</p>' +
+        '</div>';
+      }
+
+      function renderSkeleton(rows) {
+        let html = '<div class="skeleton-list" aria-hidden="true">';
+        for (let i = 0; i < rows; i++) {
+          html += '<div class="skeleton-row">' +
+            '<div class="skeleton-bar short"></div>' +
+            '<div class="skeleton-bar tall medium"></div>' +
+            '<div class="skeleton-bar"></div>' +
+          '</div>';
+        }
+        html += '</div>';
+        return html;
       }
 
       function formatDate(value) {
-        return new Date(value).toLocaleString("de-DE", {
-          dateStyle: "medium",
-          timeStyle: "short"
-        });
+        return new Date(value).toLocaleString("de-DE", { dateStyle: "medium", timeStyle: "short" });
       }
 
       function formatShortDate(value) {
-        return new Date(value).toLocaleDateString("de-DE", {
-          day: "2-digit",
-          month: "2-digit"
-        });
+        return new Date(value).toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit" });
       }
 
       function formatRelativeDate(value) {
         const date = new Date(value);
         const diffMs = Date.now() - date.getTime();
-        const diffHours = Math.max(1, Math.round(diffMs / 36e5));
-
-        if (diffHours < 24) {
-          return "vor " + diffHours + " h";
-        }
-
+        const diffMin = Math.round(diffMs / 60000);
+        if (diffMin < 60) return diffMin <= 1 ? "gerade eben" : "vor " + diffMin + " min";
+        const diffHours = Math.round(diffMin / 60);
+        if (diffHours < 24) return "vor " + diffHours + " h";
         const diffDays = Math.round(diffHours / 24);
-        if (diffDays < 7) {
-          return "vor " + diffDays + " T";
-        }
-
+        if (diffDays < 7) return "vor " + diffDays + " T";
         return formatShortDate(value);
       }
 
       function formatDomain(value) {
         try {
-          return new URL(value).hostname.replace(/^www\./, "");
+          return new URL(value).hostname.replace(/^www\\./, "");
         } catch {
           return value;
         }
-      }
-
-      function emptyState(title, copy) {
-        return '<div class="empty-state"><h3>' + escapeHtml(title) + '</h3><p class="empty-copy">' + escapeHtml(copy) + "</p></div>";
       }
 
       function escapeHtml(value) {
@@ -1216,6 +1706,41 @@ function renderLibraryPage() {
 
       function escapeAttr(value) {
         return escapeHtml(value);
+      }
+
+      // ---------- icons (inline SVG strings) ----------
+      function iconExternal() {
+        return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="14" height="14"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>';
+      }
+      function iconChevron() {
+        return '<svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>';
+      }
+      function iconTrash() {
+        return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg>';
+      }
+      function iconCalendar() {
+        return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>';
+      }
+      function iconClock() {
+        return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
+      }
+      function iconKey() {
+        return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="15" r="4"/><path d="M10.85 12.15 19 4"/><path d="M18 5l3 3"/><path d="M15 8l3 3"/></svg>';
+      }
+      function iconSearch() {
+        return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>';
+      }
+      function iconBookmark() {
+        return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>';
+      }
+      function iconReader() {
+        return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>';
+      }
+      function iconCheck() {
+        return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>';
+      }
+      function iconAlert() {
+        return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
       }
     </script>
   </body>
