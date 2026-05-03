@@ -29,6 +29,34 @@ chrome.commands.onCommand.addListener(async (command) => {
   openArchiveAction("archive-is-view", tab?.url);
 });
 
+chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+  if (message?.type !== "ensure-content-script") {
+    return;
+  }
+
+  void (async () => {
+    try {
+      if (!chrome.scripting?.executeScript) {
+        throw new Error("Scripting API ist nicht verfuegbar. Bitte Erweiterung neu laden.");
+      }
+
+      await chrome.scripting.executeScript({
+        target: { tabId: message.tabId },
+        files: ["src/content.js"]
+      });
+
+      sendResponse({ ok: true });
+    } catch (error) {
+      sendResponse({
+        ok: false,
+        error: error instanceof Error ? error.message : "Content Script konnte nicht geladen werden."
+      });
+    }
+  })();
+
+  return true;
+});
+
 function openArchiveAction(action, sourceUrl) {
   if (!sourceUrl || !isSupportedUrl(sourceUrl)) {
     return;

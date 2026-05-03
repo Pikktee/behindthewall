@@ -49,7 +49,7 @@ actionsEl.addEventListener("click", async (event) => {
         window.close();
         break;
       case "open-settings":
-        chrome.runtime.openOptionsPage();
+        await chrome.tabs.create({ url: chrome.runtime.getURL("options.html") });
         window.close();
         break;
       case "archive-is-view":
@@ -71,9 +71,7 @@ async function handleSave() {
   }
 
   setStatus("Extrahiere Seiteninhalt...");
-  const result = await chrome.tabs.sendMessage(activeTab.id, {
-    type: "extract-page-payload"
-  });
+  const result = await extractPagePayload(activeTab.id);
   if (!result?.ok) {
     throw new Error(result?.error || "Seitentext konnte nicht gelesen werden.");
   }
@@ -118,4 +116,32 @@ function isSupportedUrl(value) {
 function setStatus(message, isError = false) {
   statusEl.textContent = message;
   statusEl.dataset.error = isError ? "true" : "false";
+}
+
+async function extractPagePayload(tabId) {
+  try {
+    return await chrome.tabs.sendMessage(tabId, {
+      type: "extract-page-payload"
+    });
+  } catch (error) {
+    if (!isMissingReceiverError(error)) {
+      throw error;
+    }
+
+    const injection = await chrome.runtime.sendMessage({
+      type: "ensure-content-script",
+      tabId
+    });
+    if (!injection?.ok) {
+      throw new Error(injection?.error || "Content Script konnte nicht geladen werden.");
+    }
+
+    return chrome.tabs.sendMessage(tabId, {
+      type: "extract-page-payload"
+    });
+  }
+}
+
+function isMissingReceiverError(error) {
+  return error instanceof Error && error.message.includes("Receiving end does not exist");
 }

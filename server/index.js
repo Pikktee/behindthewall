@@ -8,7 +8,11 @@ const { DatabaseSync } = require("node:sqlite");
 const PORT = Number(process.env.PORT || 8787);
 const HOST = process.env.HOST || "127.0.0.1";
 const API_TOKEN = process.env.BTW_API_TOKEN || "change-me";
-const DB_PATH = process.env.BTW_DB_PATH || path.join(process.cwd(), "data", "bookmarks.sqlite");
+const DB_PATH =
+  process.env.BTW_DB_PATH ||
+  (process.env.RAILWAY_VOLUME_MOUNT_PATH
+    ? path.join(process.env.RAILWAY_VOLUME_MOUNT_PATH, "bookmarks.sqlite")
+    : path.join(process.cwd(), "data", "bookmarks.sqlite"));
 
 fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
 
