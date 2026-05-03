@@ -4,6 +4,7 @@ WORKDIR /app
 
 COPY package.json ./
 COPY server ./server
+COPY icons ./icons
 
 ENV NODE_ENV=production
 ENV PORT=8787

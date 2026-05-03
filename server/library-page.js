@@ -5,6 +5,9 @@ function renderLibraryPage() {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Behind The Wall — Bibliothek</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon32.png">
+    <link rel="icon" type="image/png" sizes="128x128" href="/icons/icon128.png">
+    <link rel="apple-touch-icon" href="/icons/icon128.png">
     <style>
       :root {
         color-scheme: light;
@@ -90,17 +93,13 @@ function renderLibraryPage() {
       }
 
       .brand-mark {
-        display: grid;
-        place-items: center;
-        width: 42px;
-        height: 42px;
+        display: block;
+        width: 44px;
+        height: 44px;
         border-radius: 12px;
-        background: var(--accent);
-        color: #fff;
-        font-weight: 800;
-        letter-spacing: 0.04em;
-        font-size: 14px;
-        box-shadow: 0 6px 16px rgba(31, 122, 114, 0.25);
+        object-fit: cover;
+        background: var(--surface);
+        box-shadow: 0 6px 16px rgba(31, 122, 114, 0.18), 0 0 0 1px var(--line);
       }
 
       .brand-text .eyebrow {
@@ -439,81 +438,15 @@ function renderLibraryPage() {
         box-shadow: 0 0 0 3px var(--accent-ring);
       }
 
-      .select-shell::after {
-        content: "";
+      .select-chevron {
         position: absolute;
-        right: 14px;
+        right: 12px;
         top: 50%;
-        width: 7px;
-        height: 7px;
-        margin-top: -5px;
-        border-right: 1.6px solid var(--muted-strong);
-        border-bottom: 1.6px solid var(--muted-strong);
-        transform: rotate(45deg);
-        pointer-events: none;
-      }
-
-      /* ---------- Switch ---------- */
-      .switch {
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        padding: 0 12px;
-        height: 38px;
-        border: 1px solid var(--line);
-        border-radius: var(--radius-sm);
-        background: var(--surface-subtle);
-        cursor: pointer;
-        user-select: none;
-        font-weight: 530;
-        transition: border-color var(--transition), background var(--transition);
-      }
-
-      .switch:hover {
-        border-color: var(--line-strong);
-        background: var(--surface);
-      }
-
-      .switch input {
-        position: absolute;
-        opacity: 0;
-        pointer-events: none;
-      }
-
-      .switch-track {
-        position: relative;
-        width: 32px;
-        height: 18px;
-        border-radius: 999px;
-        background: #d6d2c8;
-        flex-shrink: 0;
-        transition: background var(--transition);
-      }
-
-      .switch-track::after {
-        content: "";
-        position: absolute;
-        top: 2px;
-        left: 2px;
         width: 14px;
         height: 14px;
-        border-radius: 50%;
-        background: #fff;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
-        transition: transform var(--transition);
-      }
-
-      .switch input:checked ~ .switch-track {
-        background: var(--accent);
-      }
-
-      .switch input:checked ~ .switch-track::after {
-        transform: translateX(14px);
-      }
-
-      .switch:has(input:focus-visible) {
-        border-color: var(--accent);
-        box-shadow: 0 0 0 3px var(--accent-ring);
+        margin-top: -7px;
+        color: var(--muted-strong);
+        pointer-events: none;
       }
 
       /* ---------- Stats strip ---------- */
@@ -1081,7 +1014,7 @@ function renderLibraryPage() {
     <main class="shell">
       <header class="masthead">
         <div class="brand">
-          <div class="brand-mark" aria-hidden="true">BTW</div>
+          <img src="/icons/icon128.png" alt="" class="brand-mark" width="44" height="44">
           <div class="brand-text">
             <p class="eyebrow">Behind The Wall</p>
             <h1>Bibliothek</h1>
@@ -1114,12 +1047,8 @@ function renderLibraryPage() {
               <option value="updated-asc">Älteste zuerst</option>
               <option value="title-asc">Titel A–Z</option>
             </select>
+            <svg class="select-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
           </div>
-          <label class="switch" data-tooltip="Nur Einträge mit Tags zeigen">
-            <input id="tag-filter" type="checkbox">
-            <span class="switch-track" aria-hidden="true"></span>
-            <span>Nur mit Tags</span>
-          </label>
           <div class="stats-strip" aria-live="polite">
             <span><strong id="stat-total">0</strong>Gesamt</span>
             <span class="sep" aria-hidden="true"></span>
@@ -1174,7 +1103,6 @@ function renderLibraryPage() {
         loading: false,
         query: "",
         sort: "updated-desc",
-        onlyTagged: false,
         totalCount: 0,
         items: [],
         visibleItems: [],
@@ -1186,7 +1114,6 @@ function renderLibraryPage() {
         searchShell: document.querySelector("#search-shell"),
         searchInput: document.querySelector("#search-input"),
         sortSelect: document.querySelector("#sort-select"),
-        tagFilter: document.querySelector("#tag-filter"),
         clearSearchButton: document.querySelector("#clear-search"),
         toggleAuthButton: document.querySelector("#toggle-auth"),
         authPillLabel: document.querySelector("#auth-pill-label"),
@@ -1243,12 +1170,6 @@ function renderLibraryPage() {
 
       els.sortSelect.addEventListener("change", () => {
         state.sort = els.sortSelect.value;
-        deriveVisibleItems();
-        renderAll();
-      });
-
-      els.tagFilter.addEventListener("change", () => {
-        state.onlyTagged = els.tagFilter.checked;
         deriveVisibleItems();
         renderAll();
       });
@@ -1474,10 +1395,6 @@ function renderLibraryPage() {
       function deriveVisibleItems() {
         let items = state.items.slice();
 
-        if (state.onlyTagged) {
-          items = items.filter((item) => Array.isArray(item.tags) && item.tags.length > 0);
-        }
-
         items.sort((a, b) => {
           if (state.sort === "updated-asc") {
             return new Date(a.updatedAt) - new Date(b.updatedAt);
@@ -1544,11 +1461,11 @@ function renderLibraryPage() {
         }
 
         if (!state.visibleItems.length) {
-          if (state.query || state.onlyTagged) {
+          if (state.query) {
             els.results.innerHTML = renderEmpty(
               iconSearch(),
               "Keine Treffer",
-              "Suche oder Filter anpassen, um Einträge zu sehen."
+              "Andere Suchbegriffe oder Suche zurücksetzen."
             );
           } else {
             els.results.innerHTML = renderEmpty(
@@ -1566,7 +1483,7 @@ function renderLibraryPage() {
             : "";
           const active = item.id === state.selectedId ? "true" : "false";
           const domain = escapeHtml(formatDomain(item.normalizedUrl || item.url));
-          const excerpt = item.excerpt || item.description;
+          const excerpt = summarize(item.content, 220) || item.excerpt || item.description;
 
           return '<button class="result-card" type="button" data-item-id="' + escapeAttr(item.id) + '" data-active="' + active + '">' +
             '<div class="result-topline">' +
@@ -1601,17 +1518,26 @@ function renderLibraryPage() {
         const expanded = state.contentExpanded ? "true" : "false";
         const toggleLabel = state.contentExpanded ? "Volltext einklappen" : "Volltext anzeigen";
 
+        const createdStr = formatDate(item.createdAt);
+        const updatedStr = formatDate(item.updatedAt);
+        const sameDate = createdStr === updatedStr;
+        const dateChips = sameDate
+          ? '<span class="meta-chip" data-tooltip="Gespeichert am">' + iconCalendar() + '<strong>' + escapeHtml(createdStr) + '</strong></span>'
+          : '<span class="meta-chip" data-tooltip="Gespeichert am">' + iconCalendar() + '<strong>' + escapeHtml(createdStr) + '</strong></span>' +
+            '<span class="meta-chip" data-tooltip="Zuletzt aktualisiert">' + iconClock() + '<strong>' + escapeHtml(updatedStr) + '</strong></span>';
+
+        const summary = summarize(item.content, 480) || item.excerpt || item.description;
+
         els.detailPanel.innerHTML =
           '<article class="detail-card">' +
             '<p class="detail-domain">' + escapeHtml(formatDomain(item.normalizedUrl || item.url)) + '</p>' +
             '<h2 class="detail-title">' + escapeHtml(item.title || item.normalizedUrl) + '</h2>' +
             '<p class="detail-url"><a href="' + escapeAttr(item.url) + '" target="_blank" rel="noreferrer">' + escapeHtml(item.url) + '</a></p>' +
             '<div class="detail-meta-row">' +
-              '<span class="meta-chip" data-tooltip="Gespeichert am">' + iconCalendar() + '<strong>' + escapeHtml(formatDate(item.createdAt)) + '</strong></span>' +
-              '<span class="meta-chip" data-tooltip="Zuletzt aktualisiert">' + iconClock() + '<strong>' + escapeHtml(formatDate(item.updatedAt)) + '</strong></span>' +
+              dateChips +
               tagsRow +
             '</div>' +
-            (item.excerpt || item.description ? '<p class="detail-description">' + escapeHtml(item.excerpt || item.description) + '</p>' : "") +
+            (summary ? '<p class="detail-description">' + escapeHtml(summary) + '</p>' : "") +
             '<div class="detail-actions">' +
               '<button class="primary-button" type="button" data-open-source>' + iconExternal() + 'Quelle öffnen</button>' +
               (hasContent
@@ -1693,6 +1619,23 @@ function renderLibraryPage() {
         } catch {
           return value;
         }
+      }
+
+      function summarize(text, maxLen) {
+        if (!text) return "";
+        const cleaned = String(text).replace(/\\s+/g, " ").trim();
+        if (!cleaned) return "";
+        if (cleaned.length <= maxLen) return cleaned;
+        const slice = cleaned.slice(0, maxLen);
+        const tailStart = Math.max(0, maxLen - 90);
+        const tail = slice.slice(tailStart);
+        const sentenceMatch = tail.match(/^.*[.!?…]/);
+        if (sentenceMatch && sentenceMatch[0].length > 30) {
+          return cleaned.slice(0, tailStart + sentenceMatch[0].length).trim() + " …";
+        }
+        const lastSpace = slice.lastIndexOf(" ");
+        const cut = lastSpace > maxLen * 0.6 ? slice.slice(0, lastSpace) : slice;
+        return cut.trim() + " …";
       }
 
       function escapeHtml(value) {

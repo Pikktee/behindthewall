@@ -238,6 +238,37 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
+    if (req.method === "GET" && /^\/icons\/icon(16|32|48|128)\.png$/.test(url.pathname)) {
+      const filePath = path.join(__dirname, "..", path.basename(path.dirname(url.pathname)), path.basename(url.pathname));
+      try {
+        const data = fs.readFileSync(filePath);
+        res.writeHead(200, {
+          "Content-Type": "image/png",
+          "Cache-Control": "public, max-age=86400"
+        });
+        res.end(data);
+      } catch {
+        sendJson(res, 404, { error: "Not found" });
+      }
+      return;
+    }
+
+    if (req.method === "GET" && url.pathname === "/favicon.ico") {
+      const filePath = path.join(__dirname, "..", "icons", "icon32.png");
+      try {
+        const data = fs.readFileSync(filePath);
+        res.writeHead(200, {
+          "Content-Type": "image/png",
+          "Cache-Control": "public, max-age=86400"
+        });
+        res.end(data);
+      } catch {
+        res.writeHead(204);
+        res.end();
+      }
+      return;
+    }
+
     if (req.method === "GET" && url.pathname === "/api/session") {
       sendJson(res, 200, {
         ok: true,
