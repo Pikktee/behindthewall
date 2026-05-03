@@ -98,7 +98,7 @@ function buildServiceUrl(action, sourceUrl) {
 
   switch (action) {
     case "archive-is-view":
-      return `https://archive.is/${encodedCanonicalUrl}`;
+      return `https://archive.is/newest/${encodedCanonicalUrl}`;
     case "wayback-view":
       return `https://web.archive.org/web/*/${canonicalUrl}`;
     default:
