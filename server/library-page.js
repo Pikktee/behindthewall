@@ -39,6 +39,15 @@ function renderLibraryPage() {
         color: var(--text);
       }
 
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0 0 auto;
+        height: 220px;
+        pointer-events: none;
+        background: linear-gradient(180deg, rgba(31, 122, 114, 0.08) 0%, rgba(31, 122, 114, 0) 100%);
+      }
+
       button,
       input,
       select {
@@ -59,7 +68,7 @@ function renderLibraryPage() {
 
       .topline {
         display: flex;
-        align-items: flex-start;
+        align-items: flex-end;
         justify-content: space-between;
         gap: 24px;
       }
@@ -95,6 +104,10 @@ function renderLibraryPage() {
         display: flex;
         flex-wrap: wrap;
         gap: 8px;
+      }
+
+      .top-actions {
+        flex-shrink: 0;
       }
 
       button {
@@ -251,6 +264,7 @@ function renderLibraryPage() {
         grid-template-columns: minmax(350px, 420px) minmax(0, 1fr);
         gap: 18px;
         margin-top: 18px;
+        align-items: start;
       }
 
       .column {
@@ -266,6 +280,10 @@ function renderLibraryPage() {
       .results-panel {
         padding: 0;
         overflow: hidden;
+        display: grid;
+        grid-template-rows: auto auto minmax(0, 1fr);
+        min-height: calc(100vh - 230px);
+        max-height: calc(100vh - 180px);
       }
 
       .results-header {
@@ -316,7 +334,7 @@ function renderLibraryPage() {
 
       .status-line {
         min-height: 20px;
-        padding: 0 4px;
+        padding: 10px 18px 0;
         color: var(--muted);
         font-size: 13px;
         line-height: 1.5;
@@ -329,6 +347,7 @@ function renderLibraryPage() {
       .results {
         display: grid;
         gap: 0;
+        overflow: auto;
       }
 
       .result-card {
@@ -357,6 +376,10 @@ function renderLibraryPage() {
         background: var(--accent);
       }
 
+      .result-card[data-active="true"] {
+        background: linear-gradient(90deg, rgba(226, 240, 237, 0.82) 0%, rgba(252, 251, 248, 0.96) 28%, rgba(252, 251, 248, 0.96) 100%);
+      }
+
       .result-topline {
         display: flex;
         align-items: flex-start;
@@ -366,7 +389,7 @@ function renderLibraryPage() {
 
       .result-title {
         margin: 0;
-        font-size: 16px;
+        font-size: 17px;
         font-weight: 760;
         line-height: 1.34;
       }
@@ -405,6 +428,10 @@ function renderLibraryPage() {
 
       .result-excerpt {
         color: var(--muted-strong);
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
       }
 
       .result-meta {
@@ -412,14 +439,16 @@ function renderLibraryPage() {
       }
 
       .reader-hero {
-        padding: 22px;
+        padding: 24px 24px 22px;
         background:
           linear-gradient(180deg, rgba(226, 240, 237, 0.7) 0%, rgba(255, 255, 255, 0.92) 100%);
       }
 
       .reader-title {
+        font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
         font-size: clamp(28px, 3vw, 42px);
-        line-height: 1.06;
+        line-height: 1.04;
+        font-weight: 700;
       }
 
       .reader-copy {
@@ -431,10 +460,11 @@ function renderLibraryPage() {
 
       .detail-panel {
         overflow: hidden;
+        min-height: 520px;
       }
 
       .detail-card {
-        padding: 22px;
+        padding: 24px;
       }
 
       .detail-header {
@@ -458,6 +488,7 @@ function renderLibraryPage() {
         color: var(--muted-strong);
         font-size: 15px;
         line-height: 1.7;
+        max-width: 64ch;
       }
 
       .detail-grid {
@@ -508,10 +539,14 @@ function renderLibraryPage() {
         padding: 16px 18px;
         border: 1px solid var(--line);
         border-radius: 8px;
-        background: var(--surface-subtle);
+        background: #fffefc;
         color: var(--muted-strong);
         white-space: pre-wrap;
         word-break: break-word;
+        max-width: 76ch;
+        font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
+        font-size: 16px;
+        line-height: 1.82;
       }
 
       .detail-actions {
@@ -520,7 +555,7 @@ function renderLibraryPage() {
 
       .empty-state,
       .auth-state {
-        padding: 18px;
+        padding: 22px;
         border: 1px dashed var(--line-strong);
         border-radius: 8px;
         background: var(--surface-subtle);
@@ -560,6 +595,7 @@ function renderLibraryPage() {
       .auth-panel {
         border-style: dashed;
         background: linear-gradient(180deg, #fbfaf7 0%, #f7f4ec 100%);
+        max-width: 620px;
       }
 
       .auth-panel[hidden] {
@@ -588,6 +624,7 @@ function renderLibraryPage() {
 
         .topline {
           flex-direction: column;
+          align-items: flex-start;
         }
 
         .toolbar-top,
@@ -610,6 +647,11 @@ function renderLibraryPage() {
 
         .result-topline {
           flex-direction: column;
+        }
+
+        .results-panel {
+          min-height: auto;
+          max-height: none;
         }
       }
     </style>
@@ -1013,7 +1055,10 @@ function renderLibraryPage() {
       }
 
       function syncAuthButtonLabel() {
-        els.toggleAuthButton.textContent = els.authPanel.hidden ? "Zugang zeigen" : "Zugang";
+        els.toggleAuthButton.textContent = state.authenticated
+          ? (els.authPanel.hidden ? "Verbunden" : "Sitzung")
+          : "Zugang";
+        els.logoutButton.hidden = !state.authenticated;
       }
 
       function renderStats() {
