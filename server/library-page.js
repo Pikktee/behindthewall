@@ -8,20 +8,21 @@ function renderLibraryPage() {
     <style>
       :root {
         color-scheme: light;
-        --bg: #f3efe7;
-        --surface: rgba(255, 255, 255, 0.9);
-        --surface-strong: rgba(255, 255, 255, 0.98);
-        --surface-soft: rgba(245, 248, 247, 0.78);
-        --line: rgba(20, 58, 54, 0.12);
-        --line-strong: rgba(20, 58, 54, 0.22);
-        --text: #16211f;
-        --muted: #61726d;
-        --accent: #0f766e;
-        --accent-strong: #0b5c56;
-        --accent-soft: rgba(15, 118, 110, 0.12);
-        --danger: #ab4234;
-        --danger-soft: rgba(171, 66, 52, 0.12);
-        --shadow: 0 24px 80px rgba(15, 34, 31, 0.08);
+        --bg: #f7f5ef;
+        --surface: #ffffff;
+        --surface-subtle: #fcfbf8;
+        --surface-muted: #f2efe8;
+        --line: #dfdbd1;
+        --line-strong: #c9c3b8;
+        --text: #17211f;
+        --muted: #687670;
+        --muted-strong: #4e5d57;
+        --accent: #1f7a72;
+        --accent-strong: #175d57;
+        --accent-soft: #e2f0ed;
+        --danger: #b24f44;
+        --danger-soft: #f8e6e3;
+        --shadow: 0 18px 40px rgba(22, 33, 31, 0.06);
         font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       }
 
@@ -33,8 +34,8 @@ function renderLibraryPage() {
         margin: 0;
         min-height: 100vh;
         background:
-          radial-gradient(circle at top left, rgba(255, 255, 255, 0.78), transparent 34%),
-          linear-gradient(180deg, #fbf8f2 0%, #eef4f1 100%);
+          radial-gradient(circle at top left, rgba(255, 255, 255, 0.92), transparent 28%),
+          linear-gradient(180deg, #faf8f3 0%, #f5f2eb 100%);
         color: var(--text);
       }
 
@@ -45,28 +46,28 @@ function renderLibraryPage() {
       }
 
       .shell {
-        width: min(1360px, calc(100vw - 32px));
+        width: min(1440px, calc(100vw - 40px));
         margin: 0 auto;
-        padding: 28px 0 44px;
+        padding: 24px 0 36px;
       }
 
       .masthead {
         display: grid;
-        gap: 20px;
-        margin-bottom: 22px;
+        gap: 18px;
+        margin-bottom: 18px;
       }
 
       .topline {
         display: flex;
         align-items: flex-start;
         justify-content: space-between;
-        gap: 18px;
+        gap: 24px;
       }
 
       .eyebrow {
-        margin: 0 0 8px;
+        margin: 0 0 10px;
         color: var(--accent);
-        font-size: 12px;
+        font-size: 13px;
         font-weight: 800;
         letter-spacing: 0.08em;
         text-transform: uppercase;
@@ -74,17 +75,17 @@ function renderLibraryPage() {
 
       h1 {
         margin: 0;
-        font-size: clamp(34px, 6vw, 58px);
-        line-height: 0.96;
+        font-size: clamp(34px, 5vw, 64px);
+        line-height: 0.92;
         letter-spacing: 0;
       }
 
       .lede {
-        max-width: 780px;
-        margin: 14px 0 0;
+        max-width: 720px;
+        margin: 12px 0 0;
         color: var(--muted);
-        font-size: 16px;
-        line-height: 1.65;
+        font-size: 17px;
+        line-height: 1.55;
       }
 
       .top-actions,
@@ -93,7 +94,7 @@ function renderLibraryPage() {
       .secondary-actions {
         display: flex;
         flex-wrap: wrap;
-        gap: 10px;
+        gap: 8px;
       }
 
       button {
@@ -101,58 +102,72 @@ function renderLibraryPage() {
         align-items: center;
         justify-content: center;
         gap: 8px;
-        min-height: 42px;
-        padding: 0 16px;
-        border: 1px solid transparent;
-        border-radius: 999px;
+        min-height: 40px;
+        padding: 0 14px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
         background: var(--surface);
         color: var(--text);
         cursor: pointer;
-        box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset;
+        transition: border-color 140ms ease, background 140ms ease, transform 140ms ease, box-shadow 140ms ease;
       }
 
       button:hover,
       button:focus-visible {
         border-color: var(--line-strong);
+        box-shadow: 0 4px 14px rgba(22, 33, 31, 0.07);
         outline: none;
       }
 
       .primary-button {
         background: var(--accent);
+        border-color: var(--accent);
         color: #fff;
       }
 
       .primary-button:hover,
       .primary-button:focus-visible {
         background: var(--accent-strong);
+        border-color: var(--accent-strong);
       }
 
       .ghost-button {
-        border-color: var(--line);
-        background: transparent;
+        background: var(--surface-subtle);
       }
 
       .danger-button {
         background: var(--danger-soft);
+        border-color: rgba(178, 79, 68, 0.18);
         color: var(--danger);
       }
 
-      .hero-panel,
-      .panel {
+      .toolbar,
+      .panel,
+      .metric,
+      .reader-hero {
         border: 1px solid var(--line);
-        border-radius: 24px;
+        border-radius: 8px;
         background: var(--surface);
         box-shadow: var(--shadow);
-        backdrop-filter: blur(18px);
       }
 
-      .hero-panel {
-        padding: 18px;
+      .toolbar {
+        display: grid;
+        gap: 14px;
+        padding: 16px;
       }
 
-      .search-grid {
+      .toolbar-top {
         display: grid;
         grid-template-columns: minmax(0, 1fr) auto;
+        gap: 12px;
+      }
+
+      .toolbar-bottom {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
         gap: 12px;
       }
 
@@ -160,18 +175,17 @@ function renderLibraryPage() {
       .field input,
       .field select {
         width: 100%;
-        min-height: 48px;
-        padding: 0 16px;
+        min-height: 44px;
+        padding: 0 14px;
         border: 1px solid var(--line);
-        border-radius: 16px;
-        background: rgba(255, 255, 255, 0.94);
+        border-radius: 8px;
+        background: var(--surface);
         color: var(--text);
       }
 
       .search-input {
-        min-height: 54px;
-        border-radius: 999px;
-        padding: 0 20px;
+        min-height: 48px;
+        padding: 0 16px;
         font-size: 15px;
       }
 
@@ -182,11 +196,13 @@ function renderLibraryPage() {
         outline: none;
       }
 
-      .filter-row {
+      .filter-row,
+      .toolbar-actions,
+      .segment-group,
+      .quick-stats {
         display: flex;
         flex-wrap: wrap;
         gap: 12px;
-        margin-top: 14px;
         align-items: center;
       }
 
@@ -194,11 +210,11 @@ function renderLibraryPage() {
         display: inline-flex;
         align-items: center;
         gap: 10px;
-        min-height: 42px;
+        min-height: 40px;
         padding: 0 14px;
         border: 1px solid var(--line);
-        border-radius: 999px;
-        background: rgba(255, 255, 255, 0.72);
+        border-radius: 8px;
+        background: var(--surface-subtle);
         color: var(--text);
       }
 
@@ -207,62 +223,64 @@ function renderLibraryPage() {
         accent-color: var(--accent);
       }
 
+      .quick-stat {
+        display: inline-flex;
+        align-items: baseline;
+        gap: 8px;
+        min-height: 40px;
+        padding: 0 12px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--surface-subtle);
+      }
+
+      .quick-stat strong {
+        font-size: 18px;
+      }
+
+      .quick-stat span {
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
       .dashboard {
         display: grid;
-        grid-template-columns: minmax(360px, 1.05fr) minmax(320px, 0.95fr);
-        gap: 22px;
-        margin-top: 22px;
+        grid-template-columns: minmax(350px, 420px) minmax(0, 1fr);
+        gap: 18px;
+        margin-top: 18px;
       }
 
       .column {
         display: grid;
         align-content: start;
-        gap: 18px;
-      }
-
-      .stats-grid {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 14px;
-      }
-
-      .stat {
-        padding: 16px;
-        border: 1px solid var(--line);
-        border-radius: 18px;
-        background: var(--surface-soft);
-      }
-
-      .stat-label {
-        margin: 0;
-        color: var(--muted);
-        font-size: 12px;
-        font-weight: 800;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-      }
-
-      .stat-value {
-        margin: 12px 0 0;
-        font-size: 28px;
-        font-weight: 820;
-        line-height: 1;
-      }
-
-      .status-line {
-        min-height: 22px;
-        margin: 2px 6px 0;
-        color: var(--muted);
-        font-size: 13px;
-        line-height: 1.5;
-      }
-
-      .status-line[data-error="true"] {
-        color: var(--danger);
+        gap: 16px;
       }
 
       .panel {
         padding: 18px;
+      }
+
+      .results-panel {
+        padding: 0;
+        overflow: hidden;
+      }
+
+      .results-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 16px 18px;
+        border-bottom: 1px solid var(--line);
+        background: var(--surface-subtle);
+      }
+
+      .results-title-wrap {
+        display: grid;
+        gap: 4px;
       }
 
       .panel-heading {
@@ -275,42 +293,86 @@ function renderLibraryPage() {
 
       .panel-heading h2,
       .detail-title,
-      .auth-title {
+      .auth-title,
+      .reader-title {
         margin: 0;
-        font-size: 19px;
+        font-size: 22px;
+        line-height: 1.2;
+      }
+
+      .panel-kicker {
+        margin: 0;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .result-count {
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .status-line {
+        min-height: 20px;
+        padding: 0 4px;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.5;
+      }
+
+      .status-line[data-error="true"] {
+        color: var(--danger);
       }
 
       .results {
         display: grid;
-        gap: 12px;
+        gap: 0;
       }
 
       .result-card {
-        padding: 16px;
-        border: 1px solid var(--line);
-        border-radius: 20px;
-        background: rgba(255, 255, 255, 0.72);
+        position: relative;
+        padding: 16px 18px;
+        border: 0;
+        border-bottom: 1px solid var(--line);
+        background: transparent;
         cursor: pointer;
-        transition: transform 120ms ease, border-color 120ms ease, background 120ms ease;
+        transition: background 120ms ease, border-color 120ms ease;
       }
 
       .result-card:hover,
       .result-card:focus-visible,
       .result-card[data-active="true"] {
-        transform: translateY(-1px);
-        border-color: rgba(15, 118, 110, 0.32);
-        background: rgba(255, 255, 255, 0.96);
+        background: var(--surface-subtle);
         outline: none;
+      }
+
+      .result-card[data-active="true"]::before {
+        content: "";
+        position: absolute;
+        inset: 10px auto 10px 0;
+        width: 3px;
+        border-radius: 99px;
+        background: var(--accent);
+      }
+
+      .result-topline {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
       }
 
       .result-title {
         margin: 0;
-        font-size: 18px;
+        font-size: 16px;
         font-weight: 760;
-        line-height: 1.24;
+        line-height: 1.34;
       }
 
       .result-url,
+      .result-domain,
       .result-meta,
       .result-tags,
       .detail-meta,
@@ -322,25 +384,68 @@ function renderLibraryPage() {
         font-size: 13px;
       }
 
-      .result-url,
+      .result-domain,
       .result-meta,
       .result-tags,
       .result-excerpt,
       .detail-url,
       .detail-excerpt,
-      .detail-content {
-        margin: 10px 0 0;
+      .detail-content,
+      .detail-description,
+      .reader-copy {
+        margin: 8px 0 0;
       }
 
       .result-excerpt,
       .detail-excerpt,
       .detail-content {
         font-size: 14px;
-        line-height: 1.65;
+        line-height: 1.68;
+      }
+
+      .result-excerpt {
+        color: var(--muted-strong);
+      }
+
+      .result-meta {
+        white-space: nowrap;
+      }
+
+      .reader-hero {
+        padding: 22px;
+        background:
+          linear-gradient(180deg, rgba(226, 240, 237, 0.7) 0%, rgba(255, 255, 255, 0.92) 100%);
+      }
+
+      .reader-title {
+        font-size: clamp(28px, 3vw, 42px);
+        line-height: 1.06;
+      }
+
+      .reader-copy {
+        max-width: 62ch;
+        color: var(--muted);
+        font-size: 15px;
+        line-height: 1.7;
+      }
+
+      .detail-panel {
+        overflow: hidden;
+      }
+
+      .detail-card {
+        padding: 22px;
+      }
+
+      .detail-header {
+        display: grid;
+        gap: 10px;
+        padding-bottom: 18px;
+        border-bottom: 1px solid var(--line);
       }
 
       .detail-url a {
-        color: var(--accent);
+        color: var(--accent-strong);
         text-decoration: none;
         word-break: break-word;
       }
@@ -349,16 +454,76 @@ function renderLibraryPage() {
         text-decoration: underline;
       }
 
-      .detail-actions {
+      .detail-description {
+        color: var(--muted-strong);
+        font-size: 15px;
+        line-height: 1.7;
+      }
+
+      .detail-grid {
+        display: grid;
+        grid-template-columns: 220px minmax(0, 1fr);
+        gap: 22px;
         margin-top: 18px;
+      }
+
+      .detail-sidebar {
+        display: grid;
+        align-content: start;
+        gap: 16px;
+      }
+
+      .meta-block {
+        padding: 14px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--surface-subtle);
+      }
+
+      .meta-label {
+        margin: 0 0 8px;
+        color: var(--muted);
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .meta-value {
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.55;
+      }
+
+      .detail-body {
+        min-width: 0;
+      }
+
+      .detail-body h3 {
+        margin: 0 0 10px;
+        font-size: 18px;
+      }
+
+      .detail-content {
+        padding: 16px 18px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--surface-subtle);
+        color: var(--muted-strong);
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+
+      .detail-actions {
+        margin-top: 16px;
       }
 
       .empty-state,
       .auth-state {
         padding: 18px;
         border: 1px dashed var(--line-strong);
-        border-radius: 20px;
-        background: rgba(255, 255, 255, 0.46);
+        border-radius: 8px;
+        background: var(--surface-subtle);
       }
 
       .empty-state h3,
@@ -392,9 +557,13 @@ function renderLibraryPage() {
         margin-top: 14px;
       }
 
-      .result-count {
-        color: var(--muted);
-        font-size: 13px;
+      .auth-panel {
+        border-style: dashed;
+        background: linear-gradient(180deg, #fbfaf7 0%, #f7f4ec 100%);
+      }
+
+      .auth-panel[hidden] {
+        display: none !important;
       }
 
       [hidden] {
@@ -406,7 +575,7 @@ function renderLibraryPage() {
           grid-template-columns: 1fr;
         }
 
-        .stats-grid {
+        .detail-grid {
           grid-template-columns: 1fr;
         }
       }
@@ -421,19 +590,26 @@ function renderLibraryPage() {
           flex-direction: column;
         }
 
-        .search-grid {
+        .toolbar-top,
+        .toolbar-bottom {
           grid-template-columns: 1fr;
         }
 
         .top-actions,
         .settings-actions,
         .detail-actions,
-        .secondary-actions {
+        .secondary-actions,
+        .toolbar-actions,
+        .filter-row {
           width: 100%;
         }
 
         button {
           width: 100%;
+        }
+
+        .result-topline {
+          flex-direction: column;
         }
       }
     </style>
@@ -445,7 +621,7 @@ function renderLibraryPage() {
           <div>
             <p class="eyebrow">Behind The Wall</p>
             <h1>Bibliothek</h1>
-            <p class="lede">Deine gespeicherten Seiten, sauber organisiert und durchsuchbar über Titel, URL und Volltext. Die Extension fängt Artikel ein, die Web-App hier ist die eigentliche Arbeitsoberfläche.</p>
+            <p class="lede">Deine gespeicherten Seiten an einem Ort. Die Extension sammelt ein, hier sichtest, suchst und liest du ruhig weiter.</p>
           </div>
           <div class="top-actions">
             <button id="focus-search" class="ghost-button" type="button">Suche fokussieren</button>
@@ -453,27 +629,36 @@ function renderLibraryPage() {
           </div>
         </div>
 
-        <section class="hero-panel">
-          <div class="search-grid">
+        <section class="toolbar">
+          <div class="toolbar-top">
             <input id="search-input" class="search-input" type="search" placeholder="Suche nach Titel, URL, Volltext oder Tags">
             <button id="clear-search" class="ghost-button" type="button">Zurücksetzen</button>
           </div>
-          <div class="filter-row">
-            <label class="pill">
-              <span>Sortierung</span>
-              <select id="sort-select">
-                <option value="updated-desc">Neueste zuerst</option>
-                <option value="updated-asc">Älteste zuerst</option>
-                <option value="title-asc">Titel A–Z</option>
-              </select>
-            </label>
-            <label class="pill">
-              <input id="tag-filter" type="checkbox">
-              <span>Nur Einträge mit Tags</span>
-            </label>
-            <div class="secondary-actions">
-              <button id="toggle-auth" class="ghost-button" type="button">Zugang</button>
-              <button id="logout-button" class="ghost-button" type="button">Abmelden</button>
+          <div class="toolbar-bottom">
+            <div class="filter-row">
+              <label class="pill">
+                <span>Sortierung</span>
+                <select id="sort-select">
+                  <option value="updated-desc">Neueste zuerst</option>
+                  <option value="updated-asc">Älteste zuerst</option>
+                  <option value="title-asc">Titel A–Z</option>
+                </select>
+              </label>
+              <label class="pill">
+                <input id="tag-filter" type="checkbox">
+                <span>Nur mit Tags</span>
+              </label>
+            </div>
+            <div class="toolbar-actions">
+              <div class="quick-stats">
+                <div class="quick-stat"><strong id="stat-total">0</strong><span>Gesamt</span></div>
+                <div class="quick-stat"><strong id="stat-visible">0</strong><span>Im Blick</span></div>
+                <div class="quick-stat"><strong id="stat-updated">-</strong><span>Zuletzt</span></div>
+              </div>
+              <div class="secondary-actions">
+                <button id="toggle-auth" class="ghost-button" type="button">Zugang</button>
+                <button id="logout-button" class="ghost-button" type="button">Abmelden</button>
+              </div>
             </div>
           </div>
         </section>
@@ -481,48 +666,41 @@ function renderLibraryPage() {
 
       <section class="dashboard">
         <div class="column">
-          <section class="stats-grid">
-            <article class="stat">
-              <p class="stat-label">Gesamt</p>
-              <p id="stat-total" class="stat-value">0</p>
-            </article>
-            <article class="stat">
-              <p class="stat-label">Im Blick</p>
-              <p id="stat-visible" class="stat-value">0</p>
-            </article>
-            <article class="stat">
-              <p class="stat-label">Aktualisiert</p>
-              <p id="stat-updated" class="stat-value">-</p>
-            </article>
-          </section>
-
-          <p id="status-line" class="status-line" aria-live="polite"></p>
-
-          <section class="panel">
-            <div class="panel-heading">
-              <h2>Ergebnisse</h2>
+          <section class="panel results-panel">
+            <div class="results-header">
+              <div class="results-title-wrap">
+                <p class="panel-kicker">Ablage</p>
+                <h2>Ergebnisse</h2>
+              </div>
               <p id="result-count" class="result-count">0 Einträge</p>
             </div>
+            <p id="status-line" class="status-line" aria-live="polite"></p>
             <section id="results" class="results" aria-live="polite"></section>
           </section>
         </div>
 
         <div class="column">
-          <section id="detail-panel" class="panel">
+          <section class="reader-hero">
+            <p class="panel-kicker">Reader</p>
+            <h2 class="reader-title">Ein Ort zum Wiederfinden, nicht nur zum Wegklicken.</h2>
+            <p class="reader-copy">Wähle links einen gespeicherten Eintrag aus. Rechts bekommst du Quelle, Zeitpunkte, Metadaten und den extrahierten Text in einer ruhigeren Lesefläche.</p>
+          </section>
+
+          <section id="detail-panel" class="panel detail-panel">
             <div class="empty-state">
               <h3>Noch kein Eintrag ausgewählt</h3>
-              <p class="empty-copy">Wähle links einen gespeicherten Artikel aus. Dann bekommst du Quelle, Metadaten und den gesicherten Volltext in einer ruhigen Lesefläche.</p>
+              <p class="empty-copy">Sobald du links etwas auswählst, wird daraus hier eine lesbare Detailansicht mit Quelle, Metadaten und Volltext.</p>
             </div>
           </section>
 
-          <section id="auth-panel" class="panel auth-state">
+          <section id="auth-panel" class="panel auth-state auth-panel">
             <h3 class="auth-title">Zugang zum Backend</h3>
-            <p class="auth-copy">Die Bibliothek arbeitet direkt gegen dein Backend. Für diese Web-Oberfläche meldest du dich einmal mit dem API-Token an, danach bleibt die Sitzung über ein Cookie bestehen.</p>
+            <p class="auth-copy">Diese Web-Oberfläche meldet sich einmal mit deinem API-Token an und arbeitet danach mit einer Sitzung auf dieser Domain weiter.</p>
             <label class="field">
               <span>API-Token</span>
               <input id="token-input" type="password" placeholder="Token eingeben">
             </label>
-            <p class="token-hint">Das Token wird nicht im Frontend gespeichert. Der Server setzt nur eine Sitzung für diese Domain.</p>
+            <p class="token-hint">Das Token bleibt nicht im Frontend liegen. Der Server setzt nur eine Sitzung für diese Domain.</p>
             <div class="settings-actions">
               <button id="login-button" class="primary-button" type="button">Anmelden</button>
               <button id="clear-token" class="ghost-button" type="button">Feld leeren</button>
@@ -623,6 +801,7 @@ function renderLibraryPage() {
 
       els.toggleAuthButton.addEventListener("click", () => {
         els.authPanel.hidden = !els.authPanel.hidden;
+        syncAuthButtonLabel();
       });
 
       els.logoutButton.addEventListener("click", async () => {
@@ -633,6 +812,7 @@ function renderLibraryPage() {
           state.visibleItems = [];
           state.selectedId = "";
           els.authPanel.hidden = false;
+          syncAuthButtonLabel();
           setStatus("Sitzung beendet.");
           renderAll();
         } catch (error) {
@@ -701,9 +881,11 @@ function renderLibraryPage() {
           const json = await response.json().catch(() => ({}));
           state.authenticated = Boolean(json.authenticated);
           els.authPanel.hidden = state.authenticated;
+          syncAuthButtonLabel();
         } catch {
           state.authenticated = false;
           els.authPanel.hidden = false;
+          syncAuthButtonLabel();
         }
       }
 
@@ -712,6 +894,7 @@ function renderLibraryPage() {
         if (!token) {
           setStatus("Bitte gib zuerst ein API-Token ein.", true);
           els.authPanel.hidden = false;
+          syncAuthButtonLabel();
           return;
         }
 
@@ -729,12 +912,14 @@ function renderLibraryPage() {
           }
           state.authenticated = true;
           els.authPanel.hidden = true;
+          syncAuthButtonLabel();
           els.tokenInput.value = "";
           setStatus("Sitzung aktiv.");
           await loadItems();
         } catch (error) {
           state.authenticated = false;
           els.authPanel.hidden = false;
+          syncAuthButtonLabel();
           setStatus(error.message || "Anmeldung fehlgeschlagen.", true);
         }
       }
@@ -824,6 +1009,11 @@ function renderLibraryPage() {
         renderStats();
         renderResults();
         renderDetail();
+        syncAuthButtonLabel();
+      }
+
+      function syncAuthButtonLabel() {
+        els.toggleAuthButton.textContent = els.authPanel.hidden ? "Zugang zeigen" : "Zugang";
       }
 
       function renderStats() {
@@ -837,7 +1027,7 @@ function renderLibraryPage() {
         if (!state.authenticated) {
           els.results.innerHTML = emptyState(
             "Anmeldung fehlt",
-            "Öffne rechts den Zugangsbereich, melde dich mit deinem API-Token an und die Bibliothek lädt sofort los."
+            "Öffne den Bereich Zugang, melde dich mit deinem API-Token an und die Bibliothek lädt sofort los."
           );
           return;
         }
@@ -865,13 +1055,19 @@ function renderLibraryPage() {
             ? '<p class="result-tags">' + item.tags.map(escapeHtml).join(" · ") + '</p>'
             : "";
           const active = item.id === state.selectedId ? "true" : "false";
+          const domain = escapeHtml(formatDomain(item.normalizedUrl || item.url));
 
           return '<article class="result-card" tabindex="0" data-item-id="' + escapeAttr(item.id) + '" data-active="' + active + '">' +
-            '<h3 class="result-title">' + escapeHtml(item.title || item.normalizedUrl) + '</h3>' +
-            '<p class="result-url">' + escapeHtml(item.normalizedUrl || item.url) + '</p>' +
+            '<div class="result-topline">' +
+              '<div>' +
+                '<p class="result-domain">' + domain + '</p>' +
+                '<h3 class="result-title">' + escapeHtml(item.title || item.normalizedUrl) + '</h3>' +
+              '</div>' +
+              '<p class="result-meta">' + escapeHtml(formatRelativeDate(item.updatedAt)) + '</p>' +
+            '</div>' +
             tags +
             '<p class="result-excerpt">' + escapeHtml(item.excerpt || item.description || "Kein Auszug verfügbar.") + '</p>' +
-            '<p class="result-meta">Aktualisiert: ' + escapeHtml(formatDate(item.updatedAt)) + '</p>' +
+            '<p class="result-url">' + escapeHtml(item.normalizedUrl || item.url) + '</p>' +
           '</article>';
         }).join("");
       }
@@ -887,21 +1083,33 @@ function renderLibraryPage() {
         }
 
         const tags = item.tags?.length
-          ? '<p class="detail-meta">Tags: ' + item.tags.map(escapeHtml).join(" · ") + "</p>"
+          ? '<div class="meta-block"><p class="meta-label">Tags</p><p class="meta-value">' + item.tags.map(escapeHtml).join(" · ") + "</p></div>"
           : "";
 
         els.detailPanel.innerHTML =
-          '<h2 class="detail-title">' + escapeHtml(item.title || item.normalizedUrl) + '</h2>' +
-          '<p class="detail-url"><a href="' + escapeAttr(item.url) + '" target="_blank" rel="noreferrer">' + escapeHtml(item.url) + "</a></p>" +
-          '<p class="detail-meta">Gespeichert: ' + escapeHtml(formatDate(item.createdAt)) + "</p>" +
-          '<p class="detail-meta">Zuletzt aktualisiert: ' + escapeHtml(formatDate(item.updatedAt)) + "</p>" +
-          tags +
-          '<p class="detail-excerpt">' + escapeHtml(item.excerpt || item.description || "Kein Auszug verfügbar.") + "</p>" +
-          '<div class="detail-actions">' +
-            '<button class="primary-button" type="button" data-open-source>Quelle öffnen</button>' +
-            '<button class="danger-button" type="button" data-delete-id="' + escapeAttr(item.id) + '">Löschen</button>' +
-          "</div>" +
-          '<p class="detail-content">' + escapeHtml(item.content || item.description || item.excerpt || "") + "</p>";
+          '<article class="detail-card">' +
+            '<div class="detail-header">' +
+              '<p class="panel-kicker">' + escapeHtml(formatDomain(item.normalizedUrl || item.url)) + '</p>' +
+              '<h2 class="detail-title">' + escapeHtml(item.title || item.normalizedUrl) + '</h2>' +
+              '<p class="detail-url"><a href="' + escapeAttr(item.url) + '" target="_blank" rel="noreferrer">' + escapeHtml(item.url) + "</a></p>" +
+              '<p class="detail-description">' + escapeHtml(item.excerpt || item.description || "Kein Auszug verfügbar.") + "</p>" +
+              '<div class="detail-actions">' +
+                '<button class="primary-button" type="button" data-open-source>Quelle öffnen</button>' +
+                '<button class="danger-button" type="button" data-delete-id="' + escapeAttr(item.id) + '">Löschen</button>' +
+              "</div>" +
+            "</div>" +
+            '<div class="detail-grid">' +
+              '<aside class="detail-sidebar">' +
+                '<div class="meta-block"><p class="meta-label">Gespeichert</p><p class="meta-value">' + escapeHtml(formatDate(item.createdAt)) + "</p></div>" +
+                '<div class="meta-block"><p class="meta-label">Aktualisiert</p><p class="meta-value">' + escapeHtml(formatDate(item.updatedAt)) + "</p></div>" +
+                tags +
+              "</aside>" +
+              '<div class="detail-body">' +
+                '<h3>Gesicherter Text</h3>' +
+                '<div class="detail-content">' + escapeHtml(item.content || item.description || item.excerpt || "Kein Text gespeichert.") + "</div>" +
+              "</div>" +
+            "</div>" +
+          "</article>";
       }
 
       function setStatus(message, isError = false) {
@@ -921,6 +1129,31 @@ function renderLibraryPage() {
           day: "2-digit",
           month: "2-digit"
         });
+      }
+
+      function formatRelativeDate(value) {
+        const date = new Date(value);
+        const diffMs = Date.now() - date.getTime();
+        const diffHours = Math.max(1, Math.round(diffMs / 36e5));
+
+        if (diffHours < 24) {
+          return "vor " + diffHours + " h";
+        }
+
+        const diffDays = Math.round(diffHours / 24);
+        if (diffDays < 7) {
+          return "vor " + diffDays + " T";
+        }
+
+        return formatShortDate(value);
+      }
+
+      function formatDomain(value) {
+        try {
+          return new URL(value).hostname.replace(/^www\./, "");
+        } catch {
+          return value;
+        }
       }
 
       function emptyState(title, copy) {
