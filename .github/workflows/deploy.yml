@@ -54,7 +54,7 @@ jobs:
              if [ -d .git ]; then \
                git fetch origin $(printf '%q' "$DEPLOY_BRANCH"); \
                git checkout $(printf '%q' "$DEPLOY_BRANCH"); \
-               git pull --ff-only origin $(printf '%q' "$DEPLOY_BRANCH"); \
+               git reset --hard origin/$(printf '%q' "$DEPLOY_BRANCH"); \
              fi; \
              mkdir -p \"\${BTW_DATA_DIR:-\$HOME/var/lib/behind-the-wall}\"; \
              export BTW_DB_PATH=\"\${BTW_DB_PATH:-\${BTW_DATA_DIR:-\$HOME/var/lib/behind-the-wall}/bookmarks.sqlite}\"; \
