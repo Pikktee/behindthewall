@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Behind The Wall Einstellungen</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body class="page-body">
+    <main class="page-shell">
+      <header class="page-header">
+        <p class="eyebrow">Behind The Wall</p>
+        <h1>Backend konfigurieren</h1>
+        <p class="page-copy">Der Bookmark-Dienst speichert Seiten zentral und durchsucht Titel sowie extrahierten Inhalt.</p>
+      </header>
+
+      <form id="settings-form" class="settings-form">
+        <label class="field">
+          <span>Backend-URL</span>
+          <input id="backend-url" name="backendUrl" type="url" placeholder="http://127.0.0.1:8787" required>
+        </label>
+        <label class="field">
+          <span>API-Token</span>
+          <input id="api-token" name="apiToken" type="password" placeholder="change-me" required>
+        </label>
+        <div class="page-actions">
+          <button id="save-settings" type="submit">Speichern</button>
+          <button id="test-connection" type="button" class="secondary-button">Verbindung testen</button>
+        </div>
+      </form>
+
+      <p id="settings-status" class="status-line" aria-live="polite"></p>
+    </main>
+    <script type="module" src="src/options.js"></script>
+  </body>
+</html>

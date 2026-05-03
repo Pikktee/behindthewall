@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Behind The Wall Bibliothek</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body class="page-body">
+    <main class="page-shell">
+      <header class="page-header">
+        <p class="eyebrow">Behind The Wall</p>
+        <h1>Bibliothek</h1>
+        <p class="page-copy">Suche ueber Titel, URL und gespeicherten Seitentext.</p>
+      </header>
+
+      <section class="library-toolbar">
+        <input id="search-input" type="search" placeholder="Suche nach Titel oder Inhalt">
+        <div class="toolbar-actions">
+          <button id="refresh-results" type="button" class="secondary-button">Aktualisieren</button>
+          <button id="open-settings" type="button" class="secondary-button">Backend</button>
+        </div>
+      </section>
+
+      <p id="library-status" class="status-line" aria-live="polite"></p>
+      <section id="results" class="results" aria-live="polite"></section>
+    </main>
+    <script type="module" src="src/library.js"></script>
+  </body>
+</html>
