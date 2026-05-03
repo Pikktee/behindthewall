@@ -1,11 +1,11 @@
 # Behind The Wall
 
-Eine Chrome-Erweiterung mit eigenem Bookmark-Backend fuer gespeicherte Artikel, Volltextsuche und Archiv-Shortcuts.
+Eine Chrome-Erweiterung mit eigenem Bookmark-Backend fuer gespeicherte Artikel, einer serverseitigen Bibliothek und Archiv-Shortcuts.
 
 ## Funktionen
 
 - Seite mitsamt extrahiertem Seitentext speichern
-- Zentrale Bibliothek mit Volltextsuche ueber Titel, URL und Inhalt
+- Serverseitige Bibliothek mit Volltextsuche ueber Titel, URL und Inhalt
 - Eigenes Backend mit SQLite und FTS5
 - Archive.is-Snapshot anzeigen
 - Wayback-Machine-Snapshots anzeigen
@@ -52,22 +52,23 @@ Empfohlener Aufbau:
 - Node.js Site in CloudPanel
 - App Port `8787`
 - PM2 als Process Manager
-- SQLite-Datei unter `/home/cloudpanel/var/lib/behind-the-wall/bookmarks.sqlite`
+- SQLite-Datei unter `$HOME/var/lib/behind-the-wall/bookmarks.sqlite`
 - API-Token als Environment-Variable `BTW_API_TOKEN`
 
 ### Schritte
 
 1. In CloudPanel eine neue Node.js Site anlegen.
 2. Das Repo in das Site-Verzeichnis deployen oder per Git pullen.
-3. Auf dem Server PM2 installieren:
-   `npm install -g pm2`
+3. Im Projekt die Abhaengigkeiten installieren:
+   `npm install`
 4. Das Datenverzeichnis anlegen:
-   `mkdir -p /home/cloudpanel/var/lib/behind-the-wall`
+   `mkdir -p ~/var/lib/behind-the-wall`
 5. Das API-Token setzen und PM2 starten:
    `export BTW_API_TOKEN="dein-starkes-token"`
-   `pm2 start ecosystem.config.cjs`
+   `export BTW_DB_PATH="$HOME/var/lib/behind-the-wall/bookmarks.sqlite"`
+   `npx pm2 start ecosystem.config.cjs --update-env`
 6. PM2-Konfiguration speichern:
-   `pm2 save`
+   `npx pm2 save`
 
 Die Datei [ecosystem.config.cjs](/Users/henrik/Dev/archive.is/ecosystem.config.cjs) ist dafuer vorbereitet.
 
@@ -84,7 +85,7 @@ Vercel ist fuer den aktuellen Stand die falsche Zielplattform, weil dein Backend
 
 ## Auto-Deploy nach git push
 
-Im Repo liegt jetzt ein GitHub-Actions-Workflow unter [.github/workflows/deploy.yml](/Users/henrik/Dev/archive.is/.github/workflows/deploy.yml). Er deployed bei jedem Push auf `main` automatisch per SSH auf deinen Hetzner-Server und fuehrt dort [scripts/deploy.sh](/Users/henrik/Dev/archive.is/scripts/deploy.sh) aus.
+Im Repo liegt jetzt ein GitHub-Actions-Workflow unter [.github/workflows/deploy.yml](/Users/henrik/Dev/archive.is/.github/workflows/deploy.yml). Er deployed bei jedem Push auf `main` automatisch per SSH auf deinen Hetzner-Server, aktualisiert das Checkout, installiert Abhaengigkeiten und startet PM2 mit aktualisierten Env-Variablen neu.
 
 Einmalig in GitHub unter `Settings -> Secrets and variables -> Actions` anlegen:
 

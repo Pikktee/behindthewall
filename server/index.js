@@ -4,10 +4,16 @@ const path = require("node:path");
 const crypto = require("node:crypto");
 const { URL } = require("node:url");
 const { DatabaseSync } = require("node:sqlite");
+const { renderLibraryPage } = require("./library-page");
 
 const PORT = Number(process.env.PORT || 8787);
 const HOST = process.env.HOST || "127.0.0.1";
 const API_TOKEN = process.env.BTW_API_TOKEN || "change-me";
+const SESSION_COOKIE_NAME = "btw_session";
+const SESSION_COOKIE_VALUE = crypto
+  .createHash("sha256")
+  .update(`${API_TOKEN}:behind-the-wall-session`)
+  .digest("hex");
 const DB_PATH =
   process.env.BTW_DB_PATH ||
   (process.env.RAILWAY_VOLUME_MOUNT_PATH
@@ -111,7 +117,7 @@ const deleteFts = db.prepare(`
 `);
 
 const listRecentStmt = db.prepare(`
-  SELECT public_id, url, normalized_url, title, description, excerpt, tags, created_at, updated_at
+  SELECT public_id, url, normalized_url, title, description, content, excerpt, tags, created_at, updated_at
   FROM bookmarks
   ORDER BY updated_at DESC
   LIMIT ?
@@ -124,6 +130,7 @@ const searchStmt = db.prepare(`
     b.normalized_url,
     b.title,
     b.description,
+    b.content,
     b.excerpt,
     b.tags,
     b.created_at,
@@ -226,6 +233,49 @@ const server = http.createServer(async (req, res) => {
 
     const url = new URL(req.url, `http://${req.headers.host || "localhost"}`);
 
+    if (req.method === "GET" && (url.pathname === "/" || url.pathname === "/library" || url.pathname === "/library/")) {
+      sendHtml(res, 200, renderLibraryPage());
+      return;
+    }
+
+    if (req.method === "GET" && url.pathname === "/api/session") {
+      sendJson(res, 200, {
+        ok: true,
+        authenticated: hasValidSession(req)
+      });
+      return;
+    }
+
+    if (req.method === "POST" && url.pathname === "/auth/session") {
+      const body = await readJson(req);
+      if (String(body.token || "") !== API_TOKEN) {
+        sendJson(res, 401, { error: "Ungültiges API-Token" });
+        return;
+      }
+
+      sendJson(
+        res,
+        200,
+        { ok: true },
+        {
+          "Set-Cookie": buildSessionCookieHeader()
+        }
+      );
+      return;
+    }
+
+    if (req.method === "DELETE" && url.pathname === "/auth/session") {
+      sendJson(
+        res,
+        200,
+        { ok: true },
+        {
+          "Set-Cookie": clearSessionCookieHeader()
+        }
+      );
+      return;
+    }
+
     if (url.pathname === "/api/health") {
       sendJson(res, 200, {
         ok: true,
@@ -259,6 +309,7 @@ const server = http.createServer(async (req, res) => {
 
       sendJson(res, 200, {
         ok: true,
+        totalCount: countStmt.get().count,
         items: items.map(toBookmarkDto)
       });
       return;
@@ -292,14 +343,22 @@ function applyCors(res) {
 
 function isAuthorized(req) {
   const header = req.headers.authorization || "";
-  return header === `Bearer ${API_TOKEN}`;
+  return header === `Bearer ${API_TOKEN}` || hasValidSession(req);
 }
 
-function sendJson(res, status, body) {
+function sendJson(res, status, body, extraHeaders = {}) {
   res.writeHead(status, {
-    "Content-Type": "application/json; charset=utf-8"
+    "Content-Type": "application/json; charset=utf-8",
+    ...extraHeaders
   });
   res.end(JSON.stringify(body));
+}
+
+function sendHtml(res, status, body) {
+  res.writeHead(status, {
+    "Content-Type": "text/html; charset=utf-8"
+  });
+  res.end(body);
 }
 
 function readJson(req) {
@@ -356,6 +415,7 @@ function toBookmarkDto(row) {
     normalizedUrl: row.normalized_url,
     title: row.title,
     description: row.description,
+    content: row.content,
     excerpt: row.excerpt,
     tags: row.tags ? row.tags.split(",").map((tag) => tag.trim()).filter(Boolean) : [],
     createdAt: row.created_at,
@@ -400,4 +460,35 @@ function clampNumber(value, fallback, min, max) {
     return fallback;
   }
   return Math.max(min, Math.min(max, Math.floor(parsed)));
+}
+
+function hasValidSession(req) {
+  const cookies = parseCookies(req.headers.cookie || "");
+  return cookies[SESSION_COOKIE_NAME] === SESSION_COOKIE_VALUE;
+}
+
+function parseCookies(header) {
+  return header
+    .split(";")
+    .map((part) => part.trim())
+    .filter(Boolean)
+    .reduce((accumulator, pair) => {
+      const separatorIndex = pair.indexOf("=");
+      if (separatorIndex === -1) {
+        return accumulator;
+      }
+
+      const key = pair.slice(0, separatorIndex).trim();
+      const value = decodeURIComponent(pair.slice(separatorIndex + 1).trim());
+      accumulator[key] = value;
+      return accumulator;
+    }, {});
+}
+
+function buildSessionCookieHeader() {
+  return `${SESSION_COOKIE_NAME}=${SESSION_COOKIE_VALUE}; Path=/; HttpOnly; SameSite=Lax; Max-Age=2592000`;
+}
+
+function clearSessionCookieHeader() {
+  return `${SESSION_COOKIE_NAME}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0`;
 }

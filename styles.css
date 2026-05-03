@@ -164,7 +164,6 @@ button:first-child:focus-visible {
   font-weight: 800;
 }
 
-button:first-child .icon {
 .actions > button:first-child .icon {
   background: rgba(255, 255, 255, 0.17);
   color: var(--accent-ink);

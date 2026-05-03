@@ -1,5 +1,5 @@
+import { DEFAULT_BACKEND_URL, getBackendConfig, normalizeSourceUrl } from "./config.js";
 import { saveBookmark } from "./backend-client.js";
-import { getBackendConfig, normalizeSourceUrl } from "./config.js";
 
 const titleEl = document.querySelector("#page-title");
 const urlEl = document.querySelector("#page-url");
@@ -46,7 +46,7 @@ actionsEl.addEventListener("click", async (event) => {
         await handleSave();
         break;
       case "open-library":
-        await chrome.tabs.create({ url: chrome.runtime.getURL("library.html") });
+        await chrome.tabs.create({ url: buildLibraryUrl(await getBackendConfig()) });
         window.close();
         break;
       case "open-settings":
@@ -112,6 +112,11 @@ function buildServiceUrl(action, sourceUrl) {
     default:
       return "";
   }
+}
+
+function buildLibraryUrl(config) {
+  const backendUrl = String(config.backendUrl || DEFAULT_BACKEND_URL).trim().replace(/\/+$/, "");
+  return `${backendUrl}/library/`;
 }
 
 function isSupportedUrl(value) {
