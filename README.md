@@ -82,6 +82,47 @@ In der Extension traegst du danach ein:
 
 Vercel ist fuer den aktuellen Stand die falsche Zielplattform, weil dein Backend auf eine beschreibbare persistente SQLite-Datei angewiesen ist. Vercel dokumentiert selbst, dass SQLite in diesem Modell nicht passend ist, waehrend CloudPanel und Railway genau den klassischen persistenten App-Betrieb abdecken.
 
+## Auto-Deploy nach git push
+
+Im Repo liegt jetzt ein GitHub-Actions-Workflow unter [.github/workflows/deploy.yml](/Users/henrik/Dev/archive.is/.github/workflows/deploy.yml). Er deployed bei jedem Push auf `main` automatisch per SSH auf deinen Hetzner-Server und fuehrt dort [scripts/deploy.sh](/Users/henrik/Dev/archive.is/scripts/deploy.sh) aus.
+
+Einmalig in GitHub unter `Settings -> Secrets and variables -> Actions` anlegen:
+
+- `DEPLOY_HOST`:
+  deine Server-Domain oder IP
+- `DEPLOY_PORT`:
+  meist `22`
+- `DEPLOY_USER`:
+  dein Site-User, z.B. `henrikheil-behindthewall-ssh`
+- `DEPLOY_SSH_KEY`:
+  der private SSH-Key, mit dem GitHub auf den Server darf
+- `DEPLOY_PATH`:
+  z.B. `/home/henrikheil-behindthewall-ssh/behindthewall`
+- `BTW_API_TOKEN`:
+  dein Backend-Token
+- optional `BTW_DB_PATH`:
+  z.B. `/home/henrikheil-behindthewall-ssh/var/lib/behind-the-wall/bookmarks.sqlite`
+- optional `BTW_DATA_DIR`:
+  z.B. `/home/henrikheil-behindthewall-ssh/var/lib/behind-the-wall`
+
+Einmalig auf dem Server noetig:
+
+1. einen SSH-Key fuer GitHub Actions erzeugen
+2. den Public Key in `~/.ssh/authorized_keys` des Site-Users eintragen
+3. den Private Key als `DEPLOY_SSH_KEY` in GitHub speichern
+
+Danach reicht fuer Deployments:
+
+1. lokal committen
+2. nach `main` pushen
+
+Der Workflow macht dann automatisch:
+
+1. SSH auf den Server
+2. `git pull`
+3. `npm install --omit=dev`
+4. PM2 Restart mit aktualisierten Env-Variablen
+
 ## Installation in Chrome
 
 1. `chrome://extensions` oeffnen.

@@ -1,7 +1,8 @@
 export const DEFAULT_BACKEND_URL = "http://127.0.0.1:8787";
 
 export async function getBackendConfig() {
-  const stored = await chrome.storage.sync.get({
+  const storage = getStorageArea();
+  const stored = await storage.get({
     backendUrl: DEFAULT_BACKEND_URL,
     apiToken: ""
   });
@@ -13,7 +14,8 @@ export async function getBackendConfig() {
 }
 
 export async function saveBackendConfig(config) {
-  await chrome.storage.sync.set({
+  const storage = getStorageArea();
+  await storage.set({
     backendUrl: String(config.backendUrl || DEFAULT_BACKEND_URL).trim().replace(/\/+$/, ""),
     apiToken: String(config.apiToken || "").trim()
   });
@@ -24,4 +26,12 @@ export function normalizeSourceUrl(value) {
   url.search = "";
   url.hash = "";
   return url.toString();
+}
+
+function getStorageArea() {
+  const storage = globalThis.chrome?.storage?.sync || globalThis.chrome?.storage?.local;
+  if (!storage) {
+    throw new Error("Die Storage-API der Erweiterung ist nicht verfuegbar. Bitte Erweiterung neu laden.");
+  }
+  return storage;
 }

@@ -13,7 +13,8 @@ module.exports = {
         NODE_ENV: "production",
         HOST: "127.0.0.1",
         PORT: 8787,
-        BTW_DB_PATH: "/home/cloudpanel/var/lib/behind-the-wall/bookmarks.sqlite"
+        BTW_DB_PATH:
+          process.env.BTW_DB_PATH || `${process.env.HOME}/var/lib/behind-the-wall/bookmarks.sqlite`
       }
     }
   ]

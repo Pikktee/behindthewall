@@ -5,6 +5,7 @@ const titleEl = document.querySelector("#page-title");
 const urlEl = document.querySelector("#page-url");
 const statusEl = document.querySelector("#popup-status");
 const actionsEl = document.querySelector(".actions");
+const settingsButtonEl = document.querySelector('[data-action="open-settings"]');
 
 let activeTab = null;
 
@@ -60,6 +61,15 @@ actionsEl.addEventListener("click", async (event) => {
       default:
         break;
     }
+  } catch (error) {
+    setStatus(error.message, true);
+  }
+});
+
+settingsButtonEl?.addEventListener("click", async () => {
+  try {
+    await chrome.tabs.create({ url: chrome.runtime.getURL("options.html") });
+    window.close();
   } catch (error) {
     setStatus(error.message, true);
   }

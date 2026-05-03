@@ -46,6 +46,29 @@ body {
   margin-bottom: 14px;
 }
 
+.icon-button {
+  display: inline-grid;
+  width: 38px;
+  min-width: 38px;
+  height: 38px;
+  min-height: 38px;
+  place-items: center;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1;
+}
+
+.icon-button:hover,
+.icon-button:focus-visible {
+  border-color: #bdd7d1;
+  background: var(--button-hover);
+  color: var(--ink);
+}
+
 .eyebrow {
   margin: 0 0 4px;
   color: var(--accent);
@@ -119,6 +142,16 @@ button:first-child:focus-visible {
   background: #0b665f;
 }
 
+.actions > button:first-child {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.actions > button:first-child:hover,
+.actions > button:first-child:focus-visible {
+  background: #0b665f;
+}
+
 .icon {
   display: inline-grid;
   width: 26px;
@@ -132,6 +165,7 @@ button:first-child:focus-visible {
 }
 
 button:first-child .icon {
+.actions > button:first-child .icon {
   background: rgba(255, 255, 255, 0.17);
   color: var(--accent-ink);
 }
