@@ -44,10 +44,24 @@ jobs:
           BTW_DATA_DIR: ${{ secrets.BTW_DATA_DIR }}
         run: |
           ssh -p "${DEPLOY_PORT:-22}" "${DEPLOY_USER}@${DEPLOY_HOST}" \
-            "export APP_DIR=$(printf '%q' "$DEPLOY_PATH"); \
+            "set -euo pipefail; \
+             export APP_DIR=$(printf '%q' "$DEPLOY_PATH"); \
              export DEPLOY_BRANCH=$(printf '%q' "$DEPLOY_BRANCH"); \
              export BTW_API_TOKEN=$(printf '%q' "$BTW_API_TOKEN"); \
              export BTW_DB_PATH=$(printf '%q' "$BTW_DB_PATH"); \
              export BTW_DATA_DIR=$(printf '%q' "$BTW_DATA_DIR"); \
              cd $(printf '%q' "$DEPLOY_PATH"); \
-             bash ./scripts/deploy.sh"
+             if [ -d .git ]; then \
+               git fetch origin $(printf '%q' "$DEPLOY_BRANCH"); \
+               git checkout $(printf '%q' "$DEPLOY_BRANCH"); \
+               git pull --ff-only origin $(printf '%q' "$DEPLOY_BRANCH"); \
+             fi; \
+             mkdir -p \"\${BTW_DATA_DIR:-\$HOME/var/lib/behind-the-wall}\"; \
+             export BTW_DB_PATH=\"\${BTW_DB_PATH:-\${BTW_DATA_DIR:-\$HOME/var/lib/behind-the-wall}/bookmarks.sqlite}\"; \
+             npm install --omit=dev; \
+             if npx pm2 describe behind-the-wall >/dev/null 2>&1; then \
+               npx pm2 restart behind-the-wall --update-env; \
+             else \
+               npx pm2 start ecosystem.config.cjs --update-env; \
+             fi; \
+             npx pm2 save"
